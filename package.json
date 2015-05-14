@@ -1,0 +1,23 @@
+{
+  "name": "polylint",
+  "version": "1.0.0",
+  "description": "Keeps your Polymer Elements clean and functional!",
+  "main": "polylint.js",
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PolymerLabs/polylint.git"
+  },
+  "author": "The Polymer Project Authors",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/PolymerLabs/polylint/issues"
+  },
+  "homepage": "https://github.com/PolymerLabs/polylint",
+  "dependencies": {
+    "chai": "^2.3.0",
+    "mocha": "^2.2.4"
+  }
+}
