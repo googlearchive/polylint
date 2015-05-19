@@ -7,24 +7,12 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<dom-module id="bind-to-class">
-  <template>
-    <span class="[[myVars]]">I love styling with Polymer!</span>
-    <span class$="[[myVars]]">I love styling with Polymer!</span>
-  </template>
-</dom-module>
-
+<dom-module id="some-element">
+<template>
+<div>I am some element</div>
+</template>
 <script>
 Polymer({
-  is: 'bind-to-class',
-  properties: {
-    /**
-     * A super nifty property.
-     */
-    myVars: {
-      type: String,
-      value: 'Hello linter!'
-    }
-  }
 });
 </script>
+</dom-module>
