@@ -25,6 +25,8 @@ var polylint = function polylint(path, options) {
     options = {};
   }
   options.attachAST = true;
+  options.filter = function(){return false};
+  options.redirect = "bower_components";
   return hydrolysis.Analyzer.analyze(path, options).then(function(analyzer){
     console.log("linted");
     var lintErrors = [];

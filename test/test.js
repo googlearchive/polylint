@@ -10,6 +10,7 @@
 
 // jshint node:true
 var assert = require('chai').assert;
+var path = require('path');
 
 function findWarnings(warningList, filename) {
   var warnings = [];
@@ -22,13 +23,13 @@ function findWarnings(warningList, filename) {
   return warnings;
 }
 
-var testTarget = '../sample/my-element-collection.html';
+var testTarget = 'sample/my-element-collection.html';
 
 suite('Linter', function() {
   var polylint = require('../polylint');
   var warnings;
   before(function(done) {
-    polylint(testTarget, {root: __dirname}).then(function(linterWarnings){
+    polylint(testTarget, {root: path.join(__dirname, '..')}).then(function(linterWarnings){
       console.log("linted");
       warnings = linterWarnings;
       console.log(warnings);
