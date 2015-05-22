@@ -7,6 +7,7 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
+// jshint node:true
 'use strict';
 var hydrolysis = require('hydrolysis');
 var linters = require('./lib/linters');
@@ -25,7 +26,9 @@ var polylint = function polylint(path, options) {
     options = {};
   }
   options.attachAST = true;
-  options.filter = function(){return false};
+  options.filter = function(){
+    return false;
+  };
   options.redirect = "bower_components";
   return hydrolysis.Analyzer.analyze(path, options).then(function(analyzer){
     console.log("linted");
@@ -37,6 +40,6 @@ var polylint = function polylint(path, options) {
   }).catch(function(err){
     throw err;
   });
-}
+};
 
 module.exports = polylint;
