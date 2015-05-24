@@ -21,7 +21,6 @@ var linters = require('./lib/linters');
  *     potential problems in `href`.
  */
 var polylint = function polylint(path, options) {
-  console.log("linting");
   if (!options) {
     options = {};
   }
@@ -31,10 +30,9 @@ var polylint = function polylint(path, options) {
   };
   options.redirect = "bower_components";
   return hydrolysis.Analyzer.analyze(path, options).then(function(analyzer){
-    console.log("linted");
     var lintErrors = [];
     for (var linter in linters) {
-      lintErrors = lintErrors.concat(linters[linter](analyzer));
+      lintErrors = lintErrors.concat(linters[linter](analyzer, path));
     }
     return lintErrors;
   }).catch(function(err){
