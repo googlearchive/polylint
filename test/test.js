@@ -91,8 +91,8 @@ suite('Linter', function() {
     assert.equal(first.location.line, 35);
     assert.equal(first.location.column, 5);
     assert.include(first.message, '_brokenObserverChanged');
-    assert.equal(second.location.line, 31);
-    assert.equal(second.location.column, 20);
+    assert.equal(second.location.line, 29);
+    assert.equal(second.location.column, 19);
     assert.include(second.message, '_brokenObserver2Changed');
     // assert.equal(second.location.line, 35);
     // assert.equal(second.location.column, 7);
@@ -101,10 +101,10 @@ suite('Linter', function() {
 
   test('unbalanced-delimiters', function() {
     var w = findWarnings(warnings, 'unbalanced-delimiters');
-    assert.equal(w.length, 9);
+    assert.equal(w.length, 4);
     w.forEach(function(warning){
-      assert.isAbove(warning.location.line, 13);
-      assert.isBelow(warning.location.line, 23);
+      assert.isAbove(warning.location.line, 11);
+      assert.isBelow(warning.location.line, 16);
       assert.isAbove(warning.location.column, 10);
       assert.isBelow(warning.location.column, 20);
     });

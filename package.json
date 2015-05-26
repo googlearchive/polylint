@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Keeps your Polymer Elements clean and functional!",
   "main": "polylint.js",
+  "bin": "bin/polylint.js",
   "scripts": {
     "test": "node_modules/.bin/jshint polylint.js lib && node_modules/.bin/mocha test/test.js"
   },
@@ -17,8 +18,10 @@
   },
   "homepage": "https://github.com/PolymerLabs/polylint",
   "dependencies": {
+    "colors": "^1.1.0",
     "dom5": "^1.0.2",
-    "hydrolysis": "^1.5.0"
+    "hydrolysis": "^1.5.0",
+    "optimist": "^0.6.1"
   },
   "devDependencies": {
     "chai": "^2.3.0",
