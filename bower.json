@@ -1,5 +1,6 @@
 {
   "name": "polylint",
+  "private": true,
   "version": "0.0.0",
   "homepage": "https://github.com/PolymerLabs/polylint",
   "authors": [
@@ -8,6 +9,6 @@
   "description": "Bower package for testing polylint.",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.9.0"
+    "polymer": "Polymer/polymer#^1.0.0"
   }
 }

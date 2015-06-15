@@ -16,21 +16,21 @@ var colors = require('colors/safe');
 var root = process.cwd();
 var path = process.argv[2];
 if (!path) {
-	console.error("Usage: polylint <filename>");
-	process.exit(1);
+  console.error("Usage: polylint <filename>");
+  process.exit(1);
 }
 
 function prettyPrintWarning(warning) {
-	var warning = colors.red(warning.filename) + ":" +
-	    warning.location.line + ":" + warning.location.column +
-	    "\n    " + colors.gray(warning.message);
-	console.log(warning);
+  var warning = colors.red(warning.filename) + ":" +
+                warning.location.line + ":" + warning.location.column +
+                "\n    " + colors.gray(warning.message);
+  console.log(warning);
 }
 
 polylint(path, {root: root}).then(function(lintWarnings){
-	lintWarnings.forEach(function(warning){
-		prettyPrintWarning(warning);
-	})
+  lintWarnings.forEach(function(warning){
+    prettyPrintWarning(warning);
+  })
 }).catch(function(err){
-	console.log(err.stack);
+  console.log(err.stack);
 });
