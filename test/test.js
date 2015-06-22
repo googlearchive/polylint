@@ -31,7 +31,6 @@ suite('Linter', function() {
   before(function(done) {
     polylint(testTarget, {root: path.join(__dirname, '..')}).then(function(linterWarnings){
       warnings = linterWarnings;
-      console.log(warnings);
       done();
     }).catch(function(err){
       console.log(err.stack);
@@ -77,6 +76,20 @@ suite('Linter', function() {
     assert.equal(second.location.column, 1);
     assert.include(second.message, 'not-me');
   });
+
+  test('implicit-properties', function() {
+    var w = findWarnings(warnings, 'implicit-properties');
+    assert.equal(w.length, 2);
+    var first = w[0];
+    var second = w[1];
+    assert.equal(first.location.line, 14);
+    assert.equal(first.location.column, 3);
+    assert.include(first.message, 'stringProp1');
+    assert.equal(second.location.line, 15);
+    assert.equal(second.location.column, 3);
+    assert.include(second.message, 'stringProp2');
+  });
+
 
   // TODO(ajo): Parse observers in observers: []
   test('observer-not-function', function() {

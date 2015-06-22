@@ -7,15 +7,14 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<dom-module id="bound-variables-declared">
+<dom-module id="implicit-properties">
   <template>
-  <el-one stringProp="{{stringProp}}"></el-one>
-  <el-two stringProp="{{stringProp}}"></el-two>
-  <el-one stringProp="{{stringProp1}}"></el-one>
-  <el-two stringProp="{{stringProp2}}"></el-two>
+  <el-one string-prop="{{stringProp}}"></el-one>
+  <el-two string-prop="{{stringProp}}"></el-two>
+  <el-one string-prop="{{stringProp1}}"></el-one>
+  <el-two num-prop="{{stringProp2}}"></el-two>
   </template>
 </dom-module>
-
 <script>
 Polymer({
   is: 'el-one',
