@@ -31,6 +31,7 @@ suite('Linter', function() {
   before(function(done) {
     polylint(testTarget, {root: path.join(__dirname, '..')}).then(function(linterWarnings){
       warnings = linterWarnings;
+      console.log(warnings);
       done();
     }).catch(function(err){
       console.log(err.stack);
@@ -53,6 +54,22 @@ suite('Linter', function() {
     assert.equal(warning.location.line, 12);
     assert.equal(warning.location.column, 11);
     assert.include(warning.message, 'myVar');
+  });
+
+  test('compound-binding', function() {
+    var w = findWarnings(warnings, 'compound-binding');
+    assert.equal(w.length, 1);
+    var warning = w[0];
+    assert.equal(warning.location.line, 14);
+    assert.equal(warning.location.column, 11);
+    assert.include(warning.message, 'nestedz');
+  });
+
+  test('computed-binding', function() {
+    var w = findWarnings(warnings, 'computed-binding');
+    assert.equal(w.length, 2);
+    assert.include(w[0].message, 'notAFunction');
+    assert.include(w[1].message, 'notDefined');
   });
 
   test('dom-module-after-polymer', function() {
