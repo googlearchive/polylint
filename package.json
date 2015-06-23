@@ -5,7 +5,7 @@
   "main": "polylint.js",
   "bin": "bin/polylint.js",
   "scripts": {
-    "test": "node_modules/.bin/jshint polylint.js lib && node_modules/.bin/mocha test/test.js"
+    "test": "node_modules/.bin/jshint polylint.js lib test && node_modules/.bin/mocha test/test.js"
   },
   "repository": {
     "type": "git",
