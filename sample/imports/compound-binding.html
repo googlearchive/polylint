@@ -7,14 +7,24 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<link rel="import" href="../../../polymer/polymer.html">
-<script>
-  Polymer({
-    is: 'dom-module-after-polymer'
-  });
-</script>
-<dom-module id="dom-module-after-polymer">
-<template>
-  I am an awesome element!
-</template>
+<dom-module id="compound-binding">
+  <template>
+    <span>[[nested]]</span>
+    <span>{{nested.this.that.other}}</span>
+    <span>{{!nestedz}}</span>
+  </template>
 </dom-module>
+
+<script>
+Polymer({
+  is: 'compound-binding',
+  properties: {
+    /**
+     * A super nifty property.
+     */
+    nested: {
+      type: Object
+    }
+  }
+});
+</script>

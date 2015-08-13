@@ -7,14 +7,28 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<link rel="import" href="../../../polymer/polymer.html">
-<script>
-  Polymer({
-    is: 'dom-module-after-polymer'
-  });
-</script>
-<dom-module id="dom-module-after-polymer">
-<template>
-  I am an awesome element!
-</template>
+<dom-module id="computed-binding">
+  <template>
+    <span>[[isAFunction(myVars)]]</span>
+    <span>{{notAFunction(notDefined)}}</span>
+  </template>
 </dom-module>
+
+<script>
+Polymer({
+  is: 'computed-binding',
+  properties: {
+    /**
+     * A super nifty property.
+     */
+    myVars: {
+      type: String,
+      value: 'Hello linter!'
+    }
+  },
+  isAFunction: function() {
+    return '';
+  },
+  notAFunction: 3
+});
+</script>

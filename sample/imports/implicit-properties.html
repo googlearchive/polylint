@@ -7,24 +7,41 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<dom-module id="bind-to-class">
+<dom-module id="implicit-properties">
   <template>
-    <span class="[[myVars]]">I love styling with Polymer!</span>
-    <span class$="[[myVars]]">I love styling with Polymer!</span>
+  <el-one string-prop="{{stringProp}}"></el-one>
+  <el-two string-prop="{{stringProp}}"></el-two>
+  <el-one string-prop="{{stringProp1}}"></el-one>
+  <el-two num-prop="{{stringProp2}}"></el-two>
   </template>
 </dom-module>
-
 <script>
 Polymer({
-  is: 'bind-to-class',
+  is: 'el-one',
   properties: {
     /**
      * A super nifty property.
      */
-    myVars: {
-      type: String,
-      value: 'Hello linter!'
+    stringProp: {
+      type: String
     }
   }
+});
+Polymer({
+  is: 'el-two',
+  properties: {
+    /**
+     * A super nifty property.
+     */
+    stringProp: {
+      type: String
+    },
+    numProp: {
+      type: Number
+    }
+  }
+});
+Polymer({
+  is: 'implicit-properties'
 });
 </script>
