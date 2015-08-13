@@ -10,27 +10,31 @@
 
 // jshint node:true
 var assert = require('chai').assert;
+var path = require('path');
 
 function findWarnings(warningList, filename) {
   var warnings = [];
   for (var i = 0; i < warningList.length; i++) {
     var warning = warningList[i];
-    if (warning.file.indexOf(filename) >= 0) {
+    if (warning.filename.indexOf(filename) >= 0) {
       warnings.push(warning);
     }
   }
   return warnings;
 }
 
-var testTarget = '../sample/my-element-collection.html';
+var testTarget = 'sample/my-element-collection.html';
 
 suite('Linter', function() {
-  var polylint = require('../polylint.js');
+  var polylint = require('../polylint');
   var warnings;
   before(function(done) {
-    polylint.lint(testTarget).then(function(linterWarnings){
+    polylint(testTarget, {root: path.join(__dirname, '..')}).then(function(linterWarnings){
       warnings = linterWarnings;
+      // console.log(warnings);
       done();
+    }).catch(function(err){
+      console.log(err.stack);
     });
   });
 
@@ -38,17 +42,34 @@ suite('Linter', function() {
     var w = findWarnings(warnings, 'bind-to-class');
     assert.equal(w.length, 1);
     var warning = w[0];
-    assert.equal(warning.location.line, 14);
-    assert.equal(warning.location.column, 18);
+    assert.equal(warning.location.line, 12);
+    // TODO(ajo): Attributes need more detailed location info.
+    // assert.equal(warning.location.column, 18);
   });
 
   test('bound-variables-declared', function() {
     var w = findWarnings(warnings, 'bound-variables-declared');
     assert.equal(w.length, 1);
     var warning = w[0];
-    assert.equal(warning.location.line, 14);
-    assert.equal(warning.location.column, 13);
+    assert.equal(warning.location.line, 12);
+    assert.equal(warning.location.column, 11);
     assert.include(warning.message, 'myVar');
+  });
+
+  test('compound-binding', function() {
+    var w = findWarnings(warnings, 'compound-binding');
+    assert.equal(w.length, 1);
+    var warning = w[0];
+    assert.equal(warning.location.line, 14);
+    assert.equal(warning.location.column, 11);
+    assert.include(warning.message, 'nestedz');
+  });
+
+  test('computed-binding', function() {
+    var w = findWarnings(warnings, 'computed-binding');
+    assert.equal(w.length, 2);
+    assert.include(w[0].message, 'notAFunction');
+    assert.include(w[1].message, 'notDefined');
   });
 
   test('dom-module-after-polymer', function() {
@@ -73,32 +94,47 @@ suite('Linter', function() {
     assert.include(second.message, 'not-me');
   });
 
+  test('implicit-properties', function() {
+    var w = findWarnings(warnings, 'implicit-properties');
+    assert.equal(w.length, 2);
+    var first = w[0];
+    var second = w[1];
+    assert.equal(first.location.line, 14);
+    assert.equal(first.location.column, 3);
+    assert.include(first.message, 'stringProp1');
+    assert.equal(second.location.line, 15);
+    assert.equal(second.location.column, 3);
+    assert.include(second.message, 'stringProp2');
+  });
+
+
+  // TODO(ajo): Parse observers in observers: []
   test('observer-not-function', function() {
     var w = findWarnings(warnings, 'observer-not-function');
-    assert.equal(w.length, 3);
+    assert.equal(w.length, 2);
     // An observer that exists but is string-valued declared in properties
     var first = w[0];
     // An observer in properties that doesn't exist
     var second = w[1];
-    // An observer declared in observers that is a number
-    var third = w[2];
-    assert.equal(first.location.line, 23);
-    assert.equal(first.location.column, 20);
+    // // An observer declared in observers that is a number
+    // var third = w[2];
+    assert.equal(first.location.line, 35);
+    assert.equal(first.location.column, 5);
     assert.include(first.message, '_brokenObserverChanged');
-    assert.equal(second.location.line, 31);
-    assert.equal(second.location.column, 20);
+    assert.equal(second.location.line, 29);
+    assert.equal(second.location.column, 19);
     assert.include(second.message, '_brokenObserver2Changed');
-    assert.equal(second.location.line, 35);
-    assert.equal(second.location.column, 7);
-    assert.include(second.message, '_computeValue');
+    // assert.equal(second.location.line, 35);
+    // assert.equal(second.location.column, 7);
+    // assert.include(second.message, '_computeValue');
   });
 
   test('unbalanced-delimiters', function() {
     var w = findWarnings(warnings, 'unbalanced-delimiters');
-    assert.equal(w.length, 9);
+    assert.equal(w.length, 4);
     w.forEach(function(warning){
-      assert.isAbove(warning.location.line, 13);
-      assert.isBelow(warning.location.line, 23);
+      assert.isAbove(warning.location.line, 11);
+      assert.isBelow(warning.location.line, 16);
       assert.isAbove(warning.location.column, 10);
       assert.isBelow(warning.location.column, 20);
     });
