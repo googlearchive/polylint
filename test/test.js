@@ -31,7 +31,7 @@ suite('Linter', function() {
   before(function(done) {
     polylint(testTarget, {root: path.join(__dirname, '..')}).then(function(linterWarnings){
       warnings = linterWarnings;
-      // console.log(warnings);
+     console.log(warnings);
       done();
     }).catch(function(err){
       console.log(err.stack);
