@@ -1,0 +1,504 @@
+{
+  "requirement": [
+    {
+      "error_message": "Arguments.prototype.callee is not allowed. See http:\/\/go\/closure-js-conformance#heading=h.rieqpurr8r5s",
+      "rule_id": "closure:callee",
+      "whitelist": [
+        "javascript\/closure\/base.js",
+        "javascript\/closure\/debug\/",
+        "javascript\/apps\/fava\/debug\/",
+        "javascript\/closure\/testing\/stacktrace.js"
+      ],
+      "type": "BANNED_PROPERTY",
+      "value": [
+        "Arguments.prototype.callee"
+      ]
+    },
+    {
+      "error_message": "@expose is not allowed. See http:\/\/go\/closure-js-conformance#heading=h.qe9fclmgrizi",
+      "rule_id": "closure:expose",
+      "java_class": "com.google.javascript.jscomp.ConformanceRules$BanExpose",
+      "js_module": "./ban_expose.js",
+      "type": "CUSTOM"
+    },
+    {
+      "error_message": "Only Error or Error subclass objects may be thrown. http:\/\/go\/closure-js-conformance#heading=h.r6d19yb3tmj7",
+      "rule_id": "closure:throwOfNonErrorTypes",
+      "whitelist": [
+        "javascript\/closure\/storage\/",
+        "javascript\/apps\/fava\/request\/requestwrapper.js",
+        "third_party\/java\/caja\/",
+        "third_party\/javascript\/closure\/dojo\/dom\/query.js",
+        "third_party\/javascript\/libphonenumber\/i18n\/phonenumbers\/phonenumberutil.js",
+        "third_party\/java_src\/shindig"
+      ],
+      "java_class": "com.google.javascript.jscomp.ConformanceRules$BanThrowOfNonErrorTypes",
+      "js_module": "./ban_throw_of_non_error_types.js",
+      "type": "CUSTOM"
+    },
+    {
+      "error_message": "Global declarations are not allowed. See http:\/\/go\/boq-js-conformance#heading=h.u8jj7d95sdqt",
+      "rule_id": "closure:globalVars",
+      "whitelist_regexp": [
+        "Post.*bootstrap_module"
+      ],
+      "whitelist": [
+        "javascript\/apps\/xid\/xid.js",
+        "javascript\/closure\/base.js",
+        "javascript\/closure\/labs\/testing\/",
+        "javascript\/closure\/locale\/locale.js",
+        "javascript\/closure\/testing\/",
+        "javascript\/closure\/tweak\/testhelpers.js"
+      ],
+      "java_class": "com.google.javascript.jscomp.ConformanceRules$BanGlobalVars",
+      "js_module": "./ban_global_vars.js",
+      "type": "CUSTOM"
+    },
+    {
+      "error_message": "References to \"this\" that are typed as \"unknown\" are not allowed. See http:\/\/go\/boq-js-conformance#heading=h.otnizo1x6tsu",
+      "rule_id": "closure:unknownThis",
+      "whitelist": [
+        "javascript\/closure\/base.js",
+        "javascript\/closure\/debug\/errorhandler.js",
+        "javascript\/closure\/functions\/functions.js",
+        "javascript\/closure\/memoize\/memoize.js",
+        "javascript\/closure\/testing\/",
+        "javascript\/jsaction\/actionflow.js"
+      ],
+      "java_class": "com.google.javascript.jscomp.ConformanceRules$BanUnknownThis",
+      "js_module": "./ban_unknown_this.js",
+      "type": "CUSTOM"
+    },
+    {
+      "error_message": "Window.prototype.postMessage is not allowed. See http:\/\/go\/closure-js-conformance#bookmark=h.qlgxsckksx7h",
+      "rule_id": "closure:postMessage",
+      "whitelist": [
+        "javascript\/closure\/async\/nexttick.js",
+        "javascript\/closure\/net\/xpc\/nativemessagingtransport.js"
+      ],
+      "type": "BANNED_PROPERTY_CALL",
+      "value": [
+        "Window.prototype.postMessage"
+      ]
+    },
+    {
+      "error_message": "All client side storage APIs must be pre-approved. See http:\/\/go\/closure-js-conformance#heading=h.34g5m9mhid6s",
+      "rule_id": "closure:storage",
+      "whitelist": [
+        "javascript\/closure\/debug\/fancywindow.js",
+        "javascript\/closure\/fs\/",
+        "javascript\/closure\/storage\/"
+      ],
+      "type": "BANNED_PROPERTY",
+      "value": [
+        "Window.prototype.localStorage",
+        "Window.prototype.sessionStorage",
+        "Window.prototype.indexedDB",
+        "Window.prototype.openDatabase",
+        "Window.prototype.requestFileSystem",
+        "Window.prototype.webkitRequestFileSystem"
+      ]
+    },
+    {
+      "error_message": "eval is not allowed. See http:\/\/go\/closure-js-conformance#heading=h.g2a0hz9upjap",
+      "rule_id": "closure:eval",
+      "whitelist": [
+        "javascript\/closure\/json\/json.js",
+        "javascript\/closure\/base.js",
+        "javascript\/closure\/datasource\/jsxmlhttpdatasource.js"
+      ],
+      "type": "BANNED_NAME",
+      "value": [
+        "eval"
+      ]
+    },
+    {
+      "error_message": "Assignment to Element.prototype.innerHTML is not allowed. See http:\/\/go\/closure-js-conformance#heading=h.m90l6v6oop3n",
+      "rule_id": "closure:innerHtml",
+      "whitelist": [
+        "javascript\/closure\/dom\/safe.js",
+        "javascript\/security\/jsvir\/htmlsanitizer.js",
+        "javascript\/closure\/string\/string.js",
+        "javascript\/closure\/soy\/soy.js",
+        "javascript\/closure\/labs\/structs\/map_perf.js",
+        "javascript\/closure\/testing\/",
+        "javascript\/closure\/editor\/",
+        "javascript\/closure\/dom\/browserrange\/ierange.js",
+        "javascript\/closure\/dom\/dom.js"
+      ],
+      "type": "BANNED_PROPERTY_WRITE",
+      "value": [
+        "Element.prototype.innerHTML"
+      ]
+    },
+    {
+      "error_message": "Assignment to Element.prototype.outerHTML is not allowed. See http:\/\/go\/closure-js-conformance#heading=h.m90l6v6oop3n",
+      "rule_id": "closure:outerHtml",
+      "whitelist": [
+        "javascript\/closure\/dom\/safe.js",
+        "javascript\/closure\/editor\/"
+      ],
+      "type": "BANNED_PROPERTY_WRITE",
+      "value": [
+        "Element.prototype.outerHTML"
+      ]
+    },
+    {
+      "error_message": "Using Document.prototype.write is not allowed. Use goog.dom.safe.documentWrite instead. See http:\/\/go\/secure-dom-api-conformance#heading=h.l1izirxareia.",
+      "rule_id": "closure:documentWrite",
+      "whitelist": [
+        "javascript\/closure\/async\/nexttick.js",
+        "javascript\/closure\/base.js",
+        "javascript\/closure\/dom\/safe.js",
+        "javascript\/closure\/editor\/icontent.js",
+        "javascript\/closure\/testing\/"
+      ],
+      "type": "BANNED_PROPERTY",
+      "value": [
+        "Document.prototype.write",
+        "Document.prototype.writeln"
+      ]
+    },
+    {
+      "error_message": "Assignment to Location.prototype.href is not allowed. See http:\/\/go\/closure-js-conformance#bookmark=h.4tdpmw32tbn",
+      "rule_id": "closure:locationHref",
+      "whitelist": [
+        "javascript\/closure\/dom\/safe.js",
+        "javascript\/closure\/net\/xpc\/iframepollingtransport.js",
+        "javascript\/closure\/history\/history.js"
+      ],
+      "type": "BANNED_PROPERTY_WRITE",
+      "value": [
+        "Location.prototype.href"
+      ]
+    },
+    {
+      "error_message": "Assignment to Window.prototype.location is not allowed. See http:\/\/go\/closure-js-conformance#bookmark=h.4tdpmw32tbn",
+      "rule_id": "closure:location",
+      "type": "BANNED_PROPERTY_WRITE",
+      "value": [
+        "Window.prototype.location"
+      ]
+    },
+    {
+      "error_message": "Assignment to .href property of Anchor, Link, etc elements, is not allowed. See http:\/\/go\/closure-js-conformance#bookmark=h.n6f3isbsmrpw",
+      "rule_id": "closure:href",
+      "whitelist": [
+        "javascript\/closure\/dom\/safe.js",
+        "javascript\/closure\/editor\/plugins\/linkdialogplugin.js",
+        "javascript\/closure\/testing\/testrunner.js",
+        "javascript\/closure\/editor\/link.js"
+      ],
+      "type": "BANNED_PROPERTY_WRITE",
+      "value": [
+        "Element.prototype.href",
+        "StyleSheet.prototype.href",
+        "CSSImportRule.prototype.href"
+      ]
+    },
+    {
+      "error_message": "Assignment to property requires a TrustedResourceUrl via goog.dom.safe. See http:\/\/go\/closure-js-conformance#bookmark=h.5112zw6es8ng",
+      "rule_id": "closure:trustedResourceUrlProperties",
+      "whitelist": [
+        "javascript\/closure\/dom\/safe.js",
+        "javascript\/closure\/editor\/field.js",
+        "javascript\/closure\/net\/xpc\/iframerelaytransport.js",
+        "javascript\/closure\/testing\/multitestrunner.js"
+      ],
+      "type": "BANNED_PROPERTY_WRITE",
+      "value": [
+        "HTMLElement.prototype.manifest",
+        "HTMLEmbedElement.prototype.src",
+        "HTMLFrameElement.prototype.src",
+        "HTMLIFrameElement.prototype.src",
+        "HTMLLinkElement.prototype.rel",
+        "HTMLObjectElement.prototype.data",
+        "HTMLScriptElement.prototype.src",
+        "HTMLTrackElement.prototype.src"
+      ]
+    },
+    {
+      "error_message": "goog.html.legacyconversions are not allowed. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q for details.",
+      "rule_id": "closure:legacyHtml",
+      "whitelist": [
+        "javascript\/closure\/html\/legacyconversions.js",
+        "javascript\/closure\/dom\/iframe.js",
+        "javascript\/closure\/i18n\/bidiformatter.js",
+        "javascript\/closure\/net\/crossdomainrpc.js",
+        "javascript\/closure\/ui\/ac\/richremotearraymatcher.js",
+        "javascript\/closure\/history\/history.js",
+        "javascript\/closure\/ui\/bubble.js",
+        "javascript\/closure\/ui\/dialog.js",
+        "javascript\/closure\/ui\/media\/flashobject.js",
+        "javascript\/closure\/ui\/media\/mediamodel.js",
+        "javascript\/closure\/ui\/drilldownrow.js",
+        "javascript\/closure\/ui\/prompt.js",
+        "javascript\/closure\/ui\/tooltip.js",
+        "javascript\/closure\/ui\/tree\/basenode.js"
+      ],
+      "type": "BANNED_NAME",
+      "value": [
+        "goog.html.legacyconversions"
+      ]
+    },
+    {
+      "error_message": "String style in goog.dom.iframe.createBlank is not allowed. Use goog.html.SafeStyle instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:legacyIframeCreateBlank",
+      "type": "RESTRICTED_NAME_CALL",
+      "value": [
+        "goog.dom.iframe.createBlank:function(?, !goog.html.SafeStyle=, ...?)"
+      ]
+    },
+    {
+      "error_message": "goog.dom.iframe.writeContent is not allowed. Use goog.dom.iframe.writeSafeContent instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:legacyIframeWriteContent",
+      "whitelist": [
+        "javascript\/closure\/dom\/iframe.js"
+      ],
+      "type": "BANNED_NAME",
+      "value": [
+        "goog.dom.iframe.writeContent"
+      ]
+    },
+    {
+      "error_message": "String html or style in goog.dom.iframe.createWithContent is not allowed. Use goog.html.SafeHtml and goog.html.SafeStyle instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:legacyIframeCreateWithContent",
+      "type": "RESTRICTED_NAME_CALL",
+      "value": [
+        "goog.dom.iframe.createWithContent:function(?, !goog.html.SafeHtml=, !goog.html.SafeHtml=, !goog.html.SafeStyle=, ...?)"
+      ]
+    },
+    {
+      "error_message": "goog.net.CrossDomainRpc#sendRequest is not allowed. No alternative currently exists, contact ise-hardening@ for help. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:legacyCrossDomainRpcSendRequest",
+      "whitelist": [
+        "javascript\/closure\/net\/crossdomainrpc.js"
+      ],
+      "type": "BANNED_PROPERTY",
+      "value": [
+        "goog.net.CrossDomainRpc.prototype.sendRequest"
+      ]
+    },
+    {
+      "error_message": "goog.net.CrossDomainRpc.send is not allowed. No alternative currently exists, contact ise-hardening@ for help. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:legacyCrossDomainRpcSend",
+      "whitelist": [
+        "javascript\/closure\/net\/crossdomainrpc.js"
+      ],
+      "type": "BANNED_NAME",
+      "value": [
+        "goog.net.CrossDomainRpc.send"
+      ]
+    },
+    {
+      "error_message": "goog.ui.ac.RichRemoteArrayMatcher is not allowed. No alternative currently exists, contact ise-hardening@ for help. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:legacyRichRemoteArrayMatcher",
+      "whitelist": [
+        "javascript\/closure\/ui\/ac\/richremote.js",
+        "javascript\/closure\/ui\/ac\/richremotearraymatcher.js"
+      ],
+      "type": "BANNED_NAME",
+      "value": [
+        "goog.ui.ac.RichRemoteArrayMatcher"
+      ]
+    },
+    {
+      "error_message": "goog.ui.ac.RichRemote is not allowed. No alternative currently exists, contact ise-hardening@ for help. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:legacyRichRemote",
+      "whitelist": [
+        "javascript\/closure\/ui\/ac\/richremote.js"
+      ],
+      "type": "BANNED_NAME",
+      "value": [
+        "goog.ui.ac.RichRemote"
+      ]
+    },
+    {
+      "error_message": "String URL in goog.History is not allowed. Use goog.html.TrustedResourceUrl instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:legacyHistory",
+      "type": "RESTRICTED_NAME_CALL",
+      "value": [
+        "goog.History:function(?, !goog.html.TrustedResourceUrl=, ...?)"
+      ]
+    },
+    {
+      "error_message": "String html in goog.ui.Bubble is not allowed. Use goog.html.SafeHtml instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:legacyBubble",
+      "type": "RESTRICTED_NAME_CALL",
+      "value": [
+        "goog.ui.Bubble:function(!goog.html.SafeHtml, ...?)",
+        "goog.ui.Bubble:function(Element, ...?)"
+      ]
+    },
+    {
+      "error_message": "goog.ui.Dialog#setContent is not allowed. Use setSafeHtmlContent instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:dialogHtml",
+      "type": "BANNED_PROPERTY",
+      "value": [
+        "goog.ui.Dialog.prototype.setContent"
+      ]
+    },
+    {
+      "error_message": "String promptHtml in goog.ui.Prompt is not allowed. Use goog.html.SafeHtml instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:promptHtml",
+      "type": "RESTRICTED_NAME_CALL",
+      "value": [
+        "goog.ui.Prompt:function(?, !goog.html.SafeHtml, ...?)"
+      ]
+    },
+    {
+      "error_message": "String URL in goog.ui.media.FlashObject is not allowed. Use goog.html.TrustedResourceUrl instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:flashUrl",
+      "type": "RESTRICTED_NAME_CALL",
+      "value": [
+        "goog.ui.media.FlashObject:function(!goog.html.TrustedResourceUrl, ...?)"
+      ]
+    },
+    {
+      "error_message": "String URL in goog.ui.media.MediaModel.Player is not allowed. Use goog.html.TrustedResourceUrl instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:mediaPlayerUrl",
+      "whitelist": [
+        "javascript\/closure\/ui\/media\/googlevideo.js",
+        "javascript\/closure\/ui\/media\/vimeo.js",
+        "javascript\/closure\/ui\/media\/youtube.js"
+      ],
+      "type": "RESTRICTED_NAME_CALL",
+      "value": [
+        "goog.ui.media.MediaModel.Player:function(!goog.html.TrustedResourceUrl, ...?)"
+      ]
+    },
+    {
+      "error_message": "String URL in goog.ui.media.MediaModel.Player#setUrl is not allowed. Use goog.html.TrustedResourceUrl instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:mediaPlayerSetUrl",
+      "type": "RESTRICTED_METHOD_CALL",
+      "value": [
+        "goog.ui.media.MediaModel.Player.prototype.setUrl:function(!goog.html.TrustedResourceUrl)"
+      ]
+    },
+    {
+      "error_message": "goog.ui.DrilldownRow.unsafeCreate is not allowed. Use goog.ui.DrilldownRow constructor instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:legacyDrilldownRowUnsafeCreate",
+      "whitelist": [
+        "javascript\/closure\/ui\/drilldownrow.js"
+      ],
+      "type": "BANNED_NAME",
+      "value": [
+        "goog.ui.DrilldownRow.unsafeCreate"
+      ]
+    },
+    {
+      "error_message": "goog.ui.Tooltip#setHtml is not allowed. Use setSafeHtml instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:tooltipHtml",
+      "type": "BANNED_PROPERTY",
+      "value": [
+        "goog.ui.Tooltip.prototype.setHtml"
+      ]
+    },
+    {
+      "error_message": "String html in goog.ui.tree.BaseNode is not allowed. Use goog.html.SafeHtml instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:treeBaseNodeHtml",
+      "whitelist": [
+        "javascript\/closure\/ui\/tree\/"
+      ],
+      "type": "RESTRICTED_NAME_CALL",
+      "value": [
+        "goog.ui.tree.BaseNode:function(!goog.html.SafeHtml, ...?)",
+        "goog.ui.tree.TreeNode:function(!goog.html.SafeHtml, ...?)",
+        "goog.ui.tree.TreeControl:function(!goog.html.SafeHtml, ...?)"
+      ]
+    },
+    {
+      "error_message": "First parameter opt_html of goog.ui.tree.TreeControl#createNode is not allowed. Use setSafeHtml on the created object instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:treeControlHtml",
+      "type": "RESTRICTED_METHOD_CALL",
+      "value": [
+        "goog.ui.tree.TreeControl.prototype.createNode:function()"
+      ]
+    },
+    {
+      "error_message": "goog.ui.tree.BaseNode#setAfterLabelHtml is not allowed. Use setAfterLabelSafeHtml instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:treeBaseNodeSetAfterLabelHtml",
+      "type": "BANNED_PROPERTY",
+      "value": [
+        "goog.ui.tree.BaseNode.prototype.setAfterLabelHtml"
+      ]
+    },
+    {
+      "error_message": "goog.ui.tree.BaseNode#setHtml is not allowed. Use setSafeHtml instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:treeBaseNodeSetHtml",
+      "type": "BANNED_PROPERTY",
+      "value": [
+        "goog.ui.tree.BaseNode.prototype.setHtml"
+      ]
+    },
+    {
+      "error_message": "goog.i18n.BidiFormatter#spanWrap(?, true) is not allowed. Use spanWrapSafeHtml instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:bidiSpanWrapHtml",
+      "type": "BANNED_CODE_PATTERN",
+      "value": [
+        "\/**\n * @param {goog.i18n.BidiFormatter} bidiFormatter\n * @param {?} str\n *\/\nfunction template(bidiFormatter, str) {\n  bidiFormatter.spanWrap(str, true);\n}\n",
+        "\/**\n * @param {goog.i18n.BidiFormatter} bidiFormatter\n * @param {?} str\n * @param {?} dirReset\n *\/\nfunction template(bidiFormatter, str, dirReset) {\n  bidiFormatter.spanWrap(str, true, dirReset);\n}\n"
+      ]
+    },
+    {
+      "error_message": "goog.i18n.BidiFormatter#spanWrapWithKnownDir(?, ?, true) is not allowed. Use spanWrapSafeHtmlWithKnownDir instead. See http:\/\/go\/secure-dom-api-conformance#bookmark=kix.l9bbqpox2s3q.",
+      "rule_id": "closure:bidiSpanWrapWithKnownDirHtml",
+      "whitelist": [
+        "javascript\/template\/soy\/soyutis_usegoog.js"
+      ],
+      "type": "BANNED_CODE_PATTERN",
+      "value": [
+        "\/**\n * @param {goog.i18n.BidiFormatter} bidiFormatter\n * @param {?} dir\n * @param {?} str\n *\/\nfunction template(bidiFormatter, dir, str) {\n  bidiFormatter.spanWrapWithKnownDir(dir, str, true);\n}\n",
+        "\/**\n * @param {goog.i18n.BidiFormatter} bidiFormatter\n * @param {?} dir\n * @param {?} str\n * @param {?} dirReset\n *\/\nfunction template(bidiFormatter, dir, str, dirReset) {\n  bidiFormatter.spanWrapWithKnownDir(dir, str, true, dirReset);\n}\n"
+      ]
+    },
+    {
+      "error_message": "Use of goog.debug.Logger.getLogger is not allowed. See http:\/\/go\/closure-js-conformance#heading=h.ikz9vmftcy92",
+      "rule_id": "closure:getLogger",
+      "whitelist": [
+        "javascript\/closure\/debug\/",
+        "javascript\/closure\/log\/",
+        "javascript\/apps\/chat\/",
+        "javascript\/apps\/fava\/debug\/"
+      ],
+      "type": "BANNED_NAME",
+      "value": [
+        "goog.debug.Logger.getLogger"
+      ]
+    },
+    {
+      "error_message": "Direct use of goog.debug.Logger is not allowed. See http:\/\/go\/closure-js-conformance#heading=h.ikz9vmftcy92",
+      "rule_id": "closure:logger",
+      "whitelist": [
+        "javascript\/closure\/debug\/",
+        "javascript\/closure\/log\/",
+        "javascript\/apps\/fava\/debug\/",
+        "javascript\/apps\/fava\/testing\/automation",
+        "javascript\/apps\/fava\/component\/componentlogger.js"
+      ],
+      "type": "BANNED_PROPERTY",
+      "value": [
+        "goog.debug.Logger.prototype.log",
+        "goog.debug.Logger.prototype.shout",
+        "goog.debug.Logger.prototype.severe",
+        "goog.debug.Logger.prototype.warning",
+        "goog.debug.Logger.prototype.info",
+        "goog.debug.Logger.prototype.config",
+        "goog.debug.Logger.prototype.fine",
+        "goog.debug.Logger.prototype.finer",
+        "goog.debug.Logger.prototype.finest",
+        "goog.debug.Logger.prototype.logRecord",
+        "goog.debug.Logger.prototype.getName",
+        "goog.debug.Logger.prototype.addHandler",
+        "goog.debug.Logger.prototype.removeHandler",
+        "goog.debug.Logger.prototype.getParent",
+        "goog.debug.Logger.prototype.getChildren",
+        "goog.debug.Logger.prototype.getLevel",
+        "goog.debug.Logger.prototype.setLevel",
+        "goog.debug.Logger.prototype.getEffectiveLevel",
+        "goog.debug.Logger.prototype.isLoggable",
+        "goog.debug.Logger.prototype.getLogRecord"
+      ]
+    }
+  ]
+}
