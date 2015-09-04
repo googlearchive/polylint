@@ -12,7 +12,7 @@
     "url": "https://github.com/PolymerLabs/polylint.git"
   },
   "author": "The Polymer Project Authors",
-  "license": "BSD-3-Clause",
+  "license": "http://polymer.github.io/LICENSE.txt",
   "bugs": {
     "url": "https://github.com/PolymerLabs/polylint/issues"
   },
