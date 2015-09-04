@@ -31,7 +31,7 @@ suite('Linter', function() {
   before(function(done) {
     polylint(testTarget, {root: path.join(__dirname, '..')}).then(function(linterWarnings){
       warnings = linterWarnings;
-      // console.log(warnings);
+     console.log(warnings);
       done();
     }).catch(function(err){
       console.log(err.stack);
@@ -127,6 +127,11 @@ suite('Linter', function() {
     // assert.equal(second.location.line, 35);
     // assert.equal(second.location.column, 7);
     // assert.include(second.message, '_computeValue');
+  });
+
+  test('string-literals', function() {
+    var w = findWarnings(warnings, 'string-literals');
+    assert.equal(w.length, 0);
   });
 
   test('unbalanced-delimiters', function() {

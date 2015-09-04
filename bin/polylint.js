@@ -13,10 +13,17 @@
 var polylint = require('../polylint');
 var colors = require('colors/safe');
 
-var root = process.cwd();
-var path = process.argv[2];
+var root, path;
+if (process.argv.length > 3) {
+  root = process.argv[2];
+  path = process.argv[3];
+} else {
+  root = process.cwd();
+  path = process.argv[2];
+}
+
 if (!path) {
-  console.error("Usage: polylint <filename>");
+  console.error("Usage: polylint [workdir] <filename>");
   process.exit(1);
 }
 
