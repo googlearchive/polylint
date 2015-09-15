@@ -28,7 +28,7 @@ describe(
     it(
       'applicableTo("javascript/closure/dom/safe.js")',
       function () {
-        const closureDomSafeRequirements = p.applicableTo(
+        var closureDomSafeRequirements = p.applicableTo(
           'javascript/closure/dom/safe.js');
         assert(closureDomSafeRequirements.length === 34);
       }
@@ -36,14 +36,14 @@ describe(
     it(
       'applicableTo("Post.*bootstrap_module whitelist_regexp")',
       function () {
-        const bm_init = p.applicableTo('Post/foo/bootstrap_module/init.js');
+        var bm_init = p.applicableTo('Post/foo/bootstrap_module/init.js');
         assert(bm_init.length === 39);
       }
     );
     it(
       'applicableTo("not/mentioned/in/any/path/matcher.js")',
       function () {
-        const nm_init = p.applicableTo('not/mentioned/in/any/path/matcher.js');
+        var nm_init = p.applicableTo('not/mentioned/in/any/path/matcher.js');
         assert(nm_init.length === 40);
       }
     );
