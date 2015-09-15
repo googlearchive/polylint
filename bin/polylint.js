@@ -43,6 +43,15 @@ var cli = cliArgs([
     defaultValue: null
   },
   {
+    name: "root",
+    type: String,
+    defaultValue: '',
+    description: (
+      "Root directory against which URLs in inputs are resolved."
+        + "  If not specified, then the current working directory is used."
+    )
+  },
+  {
     name: "input",
     type: String,
     alias: "i",
@@ -105,6 +114,19 @@ if (options.policy) {
 }
 
 
+var root = options.root || '';
+// Make sure resolution has a path segment to drop.
+// According to URL rules,
+// resolving index.html relative to /foo/ produces /foo/index.html, but
+// resolving index.html relative to /foo produces /index.html
+// is different from resolving index.html relative to /foo/
+// This removes any ambiguity between URL resolution rules and file path
+// resolution which might lead to confusion.
+if (root !== '' && !/[\/\\]$/.test(root)) {
+  root += '/';
+}
+
+
 function prettyPrintWarning(warning) {
   var warning = colors.red(warning.filename) + ":" +
                 warning.location.line + ":" + warning.location.column +
@@ -112,7 +134,7 @@ function prettyPrintWarning(warning) {
   console.log(warning);
 }
 
-console.log('inputs=' + JSON.stringify(inputs));
+
 // Pair inputs with root directories so that for the command line
 //     polylint.js foo/ foo/foo.html bar.html other/ main.html
 // we kick off three analyses:
@@ -128,58 +150,23 @@ console.log('inputs=' + JSON.stringify(inputs));
   // Check whether input is a root directory before picking a root and
   // a path to process.
   var input = inputs[inputIndex];
-  fs.stat(input, function(err, stats) {
-    var root, path, nextInputIndex;
-    if (err) {
-      console.error('Cannot read input `' + input + '`: ' + err);
-      root = path = null;
-      nextInputIndex = inputIndex + 1;
-    } else if (stats.isDirectory()) {
-      root = input;
-      // Make sure resolution has a path segment to drop.
-      // According to URL rules,
-      // resolving index.html relative to /foo/ produces /foo/index.html, but
-      // resolving index.html relative to /foo produces /index.html
-      // is different from resolving index.html relative to /foo/
-      // This removes any ambiguity between URL resolution rules and file path
-      // resolution which might lead to confusion.
-      if (root !== '' && !/[\/\\]$/.test(root)) {
-        root += '/';
-      }
-      if (inputIndex + 1 === inputs.length) {
-        // If we're only given a directory, look for
-        // index.html in it.
-        path = root + 'index.html';
-        nextInputIndex = inputIndex + 1;
-      } else {
-        path = inputs[inputIndex + 1];
-        nextInputIndex = inputIndex + 2;
-      }
-    } else {
-      root = '';
-      path = input;
-      nextInputIndex = inputIndex + 1;
-    }
 
-    // Finally invoke the analyzer.
-    if (path !== null) {
-      polylint(
-        path,
-        {
-          root: root,
-          jsconfPolicy: jsconfPolicyPromise
-        })
-        .then(function(lintWarnings){
-          lintWarnings.forEach(function(warning){
-            prettyPrintWarning(warning);
-          });
-        })
-        .catch(function(err){
-          console.error(err.stack);
-        });
-    }
+  // Finally invoke the analyzer.
+  polylint(
+    input,
+    {
+      root: root,
+      jsconfPolicy: jsconfPolicyPromise
+    })
+    .then(function(lintWarnings){
+      lintWarnings.forEach(function(warning){
+        prettyPrintWarning(warning);
+      });
 
-    // Process any remaining inputs.
-    processInput(nextInputIndex);
-  });
+      // Process any remaining inputs.
+      processInput(inputIndex + 1);
+    })
+    .catch(function(err){
+      console.error(err.stack);
+    });
 }(0));
