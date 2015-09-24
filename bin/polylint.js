@@ -24,6 +24,13 @@ var cli = cliArgs([
     description: "Print usage."
   },
   {
+    name: "bowerdir",
+    type: String,
+    alias: "b",
+    description: "Bower components directory. Defaults to 'bower_components'",
+    defaultValue: "bower_components"
+  },
+  {
     name: "verbose",
     type: Boolean,
     alias: "v",
@@ -46,6 +53,7 @@ var cli = cliArgs([
     name: "root",
     type: String,
     defaultValue: '',
+    alias: "r",
     description: (
       "Root directory against which URLs in inputs are resolved."
         + "  If not specified, then the current working directory is used."
@@ -83,7 +91,7 @@ var inputsOk = true;
 var inputs = options.input;
 var policyPath = options.policy;
 
-if (!inputs.length) {
+if (!inputs || !inputs.length) {
   console.error('Missing input polymer path');
   inputsOk = false;
 }
@@ -156,7 +164,8 @@ function prettyPrintWarning(warning) {
     input,
     {
       root: root,
-      jsconfPolicy: jsconfPolicyPromise
+      jsconfPolicy: jsconfPolicyPromise,
+      redirect: options.bowerdir
     })
     .then(function(lintWarnings){
       lintWarnings.forEach(function(warning){
