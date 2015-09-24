@@ -47,6 +47,15 @@ suite('Linter', function() {
     // assert.equal(warning.location.column, 18);
   });
 
+  test('bind-to-data', function() {
+    var w = findWarnings(warnings, 'bind-to-data');
+    assert.equal(w.length, 1);
+    var warning = w[0];
+    assert.equal(warning.location.line, 12);
+    // TODO(ajo): Attributes need more detailed location info.
+    // assert.equal(warning.location.column, 18);
+  });
+
   test('bound-variables-declared', function() {
     var w = findWarnings(warnings, 'bound-variables-declared');
     assert.equal(w.length, 1);
