@@ -122,7 +122,7 @@ if (options.policy) {
 }
 
 
-var root = options.root || '';
+var root = options.root || process.cwd();
 // Make sure resolution has a path segment to drop.
 // According to URL rules,
 // resolving index.html relative to /foo/ produces /foo/index.html, but
