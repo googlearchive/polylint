@@ -10,6 +10,7 @@
  */
 // jshint node:true
 'use strict';
+var process = require('process');
 var polylint = require('../polylint');
 var jsconf_policy = require('../lib/jsconf-policy');
 var colors = require('colors/safe');
@@ -122,7 +123,7 @@ if (options.policy) {
 }
 
 
-var root = options.root || process.cwd();
+var root = options.root || '';
 // Make sure resolution has a path segment to drop.
 // According to URL rules,
 // resolving index.html relative to /foo/ produces /foo/index.html, but
@@ -135,28 +136,50 @@ if (root !== '' && !/[\/\\]$/.test(root)) {
 }
 
 
+/**
+ * True iff a fatal error has been reported to the end user.
+ * @type {boolean}
+ */
+var fatalFailureOccurred = false;
+
+
 function prettyPrintWarning(warning) {
-  var warning = colors.red(warning.filename) + ":" +
-                warning.location.line + ":" + warning.location.column +
-                "\n    " + colors.gray(warning.message);
-  console.log(warning);
+  if (warning.fatal) {
+    fatalFailureOccurred = true;
+  }
+  var warningText = colors.red(warning.filename) + ":" +
+                    warning.location.line + ":" + warning.location.column +
+                    "\n    " + colors.gray(warning.message);
+  console.log(warningText);
 }
 
+process.on('uncaughtException', function(err) {
+  console.error('Uncaught exception: ', err);
+  fatalFailureOccurred = true;
+});
 
-// Pair inputs with root directories so that for the command line
-//     polylint.js foo/ foo/foo.html bar.html other/ main.html
-// we kick off three analyses:
-// 1. root='foo/'    path='foo.html'
-// 2. root='',       path='bar.html'
-// 3. root='other/', path='main.html'
+process.on('unhandledRejection', function(reason, p) {
+  console.error("Unhandled Rejection at: Promise ", p, " reason: ", reason);
+  fatalFailureOccurred = true;
+});
+
+
+// Wait for each input to be processed until after the prior one finished
+// so we don't interleave log messages and warnings in confusing ways
+// when some inputs take longer to retrieve.
 (function processInput(inputIndex) {
   if (inputIndex === inputs.length) {
     // We're done.
-    return;  // TODO: exit with a signal indicating whether errors occurred.
+    // Exit with a non-zero status code if there was a fatal error so that this
+    // executable can be used as a presubmit gate in a shell script like
+    //    if polylint ...; then
+    //      # proceed with submit
+    //    else
+    //      # don't
+    //    fi
+    process.exit(fatalFailureOccurred ? 1 : 0);
   }
 
-  // Check whether input is a root directory before picking a root and
-  // a path to process.
   var input = inputs[inputIndex];
 
   // Finally invoke the analyzer.
@@ -176,6 +199,7 @@ function prettyPrintWarning(warning) {
       processInput(inputIndex + 1);
     })
     .catch(function(err){
-      console.error(err.stack);
+      console.error(err);
+      fatalFailureOccurred = true;
     });
 }(0));
