@@ -10,6 +10,7 @@
  */
 // jshint node:true
 'use strict';
+var process = require('process');
 var polylint = require('../polylint');
 var jsconf_policy = require('../lib/jsconf-policy');
 var colors = require('colors/safe');
@@ -129,7 +130,7 @@ if (options.policy) {
 }
 
 
-var root = options.root || process.cwd();
+var root = options.root || '';
 // Make sure resolution has a path segment to drop.
 // According to URL rules,
 // resolving index.html relative to /foo/ produces /foo/index.html, but
@@ -142,12 +143,32 @@ if (root !== '' && !/[\/\\]$/.test(root)) {
 }
 
 
+/**
+ * True iff a fatal error has been reported to the end user.
+ * @type {boolean}
+ */
+var fatalFailureOccurred = false;
+
+
 function prettyPrintWarning(warning) {
-  var warning = colors.red(warning.filename) + ":" +
-                warning.location.line + ":" + warning.location.column +
-                "\n    " + colors.gray(warning.message);
-  console.log(warning);
+  if (warning.fatal) {
+    fatalFailureOccurred = true;
+  }
+  var warningText = colors.red(warning.filename) + ":" +
+                    warning.location.line + ":" + warning.location.column +
+                    "\n    " + colors.gray(warning.message);
+  console.log(warningText);
 }
+
+process.on('uncaughtException', function(err) {
+  console.error('Uncaught exception: ', err);
+  fatalFailureOccurred = true;
+});
+
+process.on('unhandledRejection', function(reason, p) {
+  console.error("Unhandled Rejection at: Promise ", p, " reason: ", reason);
+  fatalFailureOccurred = true;
+});
 
 var lintPromise = Promise.resolve(true);
 for(var i = 0; i < inputs.length; i++) {
@@ -178,5 +199,12 @@ for(var i = 0; i < inputs.length; i++) {
   })
   .catch(function(err){
     console.error(err.stack);
+      fatalFailureOccurred = true;
   });
 }
+
+var exit = function(){
+    process.exit(fatalFailureOccurred ? 1 : 0);
+}
+
+lintPromise.then(exit).catch(exit);
