@@ -24,13 +24,13 @@ var polylint = function polylint(path, options) {
   if (!options) {
     options = {};
   }
-  if (!('redirect' in options)) {
-    options.redirect = "bower_components";
-  }
   options.attachAST = true;
   options.filter = function(){
     return false;
   };
+  if (!('redirect' in options)) {
+    options.redirect = "bower_components";
+  }
   return hydrolysis.Analyzer.analyze(path, options).then(function(analyzer){
     var allWarnings = [];
     for (var linterName in linters) {
