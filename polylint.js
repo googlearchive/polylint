@@ -24,17 +24,21 @@ var polylint = function polylint(path, options) {
   if (!options) {
     options = {};
   }
+  if (!('redirect' in options) {
+    options.redirect = "bower_components";
+  }
   options.attachAST = true;
   options.filter = function(){
     return false;
   };
-  options.redirect = "bower_components";
   return hydrolysis.Analyzer.analyze(path, options).then(function(analyzer){
-    var lintErrors = [];
-    for (var linter in linters) {
-      lintErrors = lintErrors.concat(linters[linter](analyzer, path));
+    var allWarnings = [];
+    for (var linterName in linters) {
+      var linter = linters[linterName];
+      var warnings = linter(analyzer, path, options);
+      allWarnings = allWarnings.concat(warnings);
     }
-    return lintErrors;
+    return allWarnings;
   }).catch(function(err){
     throw err;
   });
