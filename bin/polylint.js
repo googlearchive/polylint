@@ -70,6 +70,13 @@ var cli = cliArgs([
         + "  If a directory is specified, it is used as the root"
         + " for resolving relative URLs in the next input."
     )
+  },
+  {
+    name: "no-recursion",
+    type: Boolean,
+    description: (
+      "Only report errors on specified input files, not from their dependencies."
+    )
   }
 ]);
 
@@ -169,6 +176,11 @@ function prettyPrintWarning(warning) {
     })
     .then(function(lintWarnings){
       lintWarnings.forEach(function(warning){
+        // If specified, ignore errors from our transitive dependencies.
+        if (options['no-recursion'] &&
+            inputs.indexOf(warning.filename) === -1) {
+          return;
+        }
         prettyPrintWarning(warning);
       });
 
