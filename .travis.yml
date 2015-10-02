@@ -4,4 +4,6 @@ node_js:
   - "0.12"
   - "4"
 sudo: false
-
+before_script:
+  - npm install -g bower
+  - bower install
