@@ -149,45 +149,34 @@ function prettyPrintWarning(warning) {
   console.log(warning);
 }
 
-
-// Pair inputs with root directories so that for the command line
-//     polylint.js foo/ foo/foo.html bar.html other/ main.html
-// we kick off three analyses:
-// 1. root='foo/'    path='foo.html'
-// 2. root='',       path='bar.html'
-// 3. root='other/', path='main.html'
-(function processInput(inputIndex) {
-  if (inputIndex === inputs.length) {
-    // We're done.
-    return;  // TODO: exit with a signal indicating whether errors occurred.
-  }
-
+var lintPromise = Promise.resolve(true);
+for(var i = 0; i < inputs.length; i++) {
   // Check whether input is a root directory before picking a root and
   // a path to process.
-  var input = inputs[inputIndex];
+  var input = inputs[i];
 
   // Finally invoke the analyzer.
-  polylint(
-    input,
-    {
-      root: root,
-      jsconfPolicy: jsconfPolicyPromise,
-      redirect: options.bowerdir
-    })
-    .then(function(lintWarnings){
-      lintWarnings.forEach(function(warning){
-        // If specified, ignore errors from our transitive dependencies.
-        if (options['no-recursion'] &&
-            inputs.indexOf(warning.filename) === -1) {
-          return;
-        }
-        prettyPrintWarning(warning);
-      });
-
-      // Process any remaining inputs.
-      processInput(inputIndex + 1);
-    })
-    .catch(function(err){
-      console.error(err.stack);
+  lintPromise = lintPromise.then(function() {
+    return polylint(
+      input,
+      {
+        root: root,
+        jsconfPolicy: jsconfPolicyPromise,
+        redirect: options.bowerdir
+      }
+    )
+  })
+  .then(function(lintWarnings){
+    lintWarnings.forEach(function(warning){
+      // If specified, ignore errors from our transitive dependencies.
+      if (options['no-recursion'] &&
+          inputs.indexOf(warning.filename) === -1) {
+        return;
+      }
+      prettyPrintWarning(warning);
     });
-}(0));
+  })
+  .catch(function(err){
+    console.error(err.stack);
+  });
+}
