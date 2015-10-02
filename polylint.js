@@ -24,7 +24,7 @@ var polylint = function polylint(path, options) {
   if (!options) {
     options = {};
   }
-  if (!('redirect' in options) {
+  if (!('redirect' in options)) {
     options.redirect = "bower_components";
   }
   options.attachAST = true;
