@@ -23,8 +23,7 @@
     "dom5": "^1.0.2",
     "hydrolysis": "^1.17.0",
     "optimist": "^0.6.1",
-    "pegjs": "^0.8.0",
-    "polymer-expressions": "git://github.com/justinfagnani/polymer-expressions.git"
+    "pegjs": "^0.8.0"
   },
   "devDependencies": {
     "chai": "^2.3.0",
