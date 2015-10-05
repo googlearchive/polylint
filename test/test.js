@@ -12,3 +12,4 @@
 
 require('./linter-test.js');
 require('./jsconf-policy-test.js');
+require('./jsconf-test.js');
