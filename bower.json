@@ -1,7 +1,7 @@
 {
   "name": "polylint",
   "private": true,
-  "version": "2.3.2",
+  "version": "2.4.2",
   "homepage": "https://github.com/PolymerLabs/polylint",
   "authors": [
     "The Polymer Project Authors"

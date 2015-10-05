@@ -15,6 +15,8 @@ var jsconf_policy = require('../lib/jsconf-policy');
 var colors = require('colors/safe');
 var cliArgs = require("command-line-args");
 var fs = require('fs');
+var pathIsAbsolute = require('path-is-absolute');
+var path = require('path');
 
 var cli = cliArgs([
   {
@@ -159,15 +161,39 @@ function prettyPrintWarning(warning) {
   console.log(warningText);
 }
 
-process.on('uncaughtException', function(err) {
-  console.error('Uncaught exception: ', err);
+function handleExceptionFromPromise(err) {
+  console.error('Uncaught exception: ', err.stack);
   fatalFailureOccurred = true;
-});
+}
+
+process.on('uncaughtException', handleExceptionFromPromise);
 
 process.on('unhandledRejection', function(reason, p) {
   console.error("Unhandled Rejection at: Promise ", p, " reason: ", reason);
   fatalFailureOccurred = true;
 });
+
+// Find the bower dir.
+var parentDirs = [];
+var foundBower = false;
+while (!foundBower) {
+  var candidatePath = path.resolve.apply(undefined, [options.root].concat(parentDirs).concat([options.bowerdir]));
+  if (candidatePath == path.join('/', options.bowerdir)) {
+    break;
+  }
+  try {
+    fs.statSync(candidatePath);
+    foundBower = true;
+  } catch (err) {
+    parentDirs.push('..');
+  }
+}
+if (!foundBower) {
+  options.bowerdir = undefined;
+} else {
+  options.bowerdir = path.join(path.join.apply(undefined, parentDirs), options.bowerdir);
+}
+
 
 var lintPromise = Promise.resolve(true);
 for(var i = 0; i < inputs.length; i++) {
@@ -175,35 +201,43 @@ for(var i = 0; i < inputs.length; i++) {
   // a path to process.
   var input = inputs[i];
 
+  // If root has been set by cwd and input is an absolute path that begins with the cwd path,
+  // strip the root part of the input path to make the FS resolver not duplicate the root path
+  if (!options.root && input.indexOf(root) === 0 && pathIsAbsolute(input)) {
+    input = input.substring(root.length);
+  }
+
   // Finally invoke the analyzer.
-  lintPromise = lintPromise.then(function() {
-    return polylint(
-      input,
-      {
-        root: root,
-        jsconfPolicy: jsconfPolicyPromise,
-        redirect: options.bowerdir
-      }
-    )
-  })
-  .then(function(lintWarnings){
-    lintWarnings.forEach(function(warning){
-      // If specified, ignore errors from our transitive dependencies.
-      if (options['no-recursion'] &&
-          inputs.indexOf(warning.filename) === -1) {
-        return;
-      }
-      prettyPrintWarning(warning);
-    });
-  })
-  .catch(function(err){
-    console.error(err.stack);
-      fatalFailureOccurred = true;
+  lintPromise = lintPromise
+    .then(function() {
+      return polylint(
+        input,
+        {
+          root: root,
+          jsconfPolicy: jsconfPolicyPromise,
+          redirect: options.bowerdir
+        }
+      );
+    })
+    .then(function(lintWarnings){
+      lintWarnings.forEach(function(warning){
+        // If specified, ignore errors from our transitive dependencies.
+        if (options['no-recursion'] && input !== warning.filename) {
+          return;
+        }
+        prettyPrintWarning(warning);
+      });
+    })
+    .catch(handleExceptionFromPromise);
+}
+
+function exit() {
+  process.exit(fatalFailureOccurred ? 1 : 0);
+};
+
+lintPromise
+  .then(exit)
+  .catch(function (err) {
+    handleExceptionFromPromise(err);
+    exit();
   });
-}
-
-var exit = function(){
-    process.exit(fatalFailureOccurred ? 1 : 0);
-}
-
-lintPromise.then(exit).catch(exit);
