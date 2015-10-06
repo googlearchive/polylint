@@ -15,6 +15,7 @@ var jsconf_policy = require('../lib/jsconf-policy');
 var colors = require('colors/safe');
 var cliArgs = require("command-line-args");
 var fs = require('fs');
+var pathIsAbsolute = require('path-is-absolute');
 
 var cli = cliArgs([
   {
@@ -175,6 +176,12 @@ for(var i = 0; i < inputs.length; i++) {
   // a path to process.
   var input = inputs[i];
 
+  // If root has been set by cwd and input is an absolute path that begins with the cwd path,
+  // strip the root part of the input path to make the FS resolver not duplicate the root path
+  if (!options.root && input.indexOf(root) === 0 && pathIsAbsolute(input)) {
+    input = input.substring(root.length);
+  }
+
   // Finally invoke the analyzer.
   lintPromise = lintPromise.then(function() {
     return polylint(
@@ -189,8 +196,7 @@ for(var i = 0; i < inputs.length; i++) {
   .then(function(lintWarnings){
     lintWarnings.forEach(function(warning){
       // If specified, ignore errors from our transitive dependencies.
-      if (options['no-recursion'] &&
-          inputs.indexOf(warning.filename) === -1) {
+      if (options['no-recursion'] && input !== warning.filename) {
         return;
       }
       prettyPrintWarning(warning);
