@@ -120,22 +120,27 @@ suite('Linter', function() {
   // TODO(ajo): Parse observers in observers: []
   test('observer-not-function', function() {
     var w = findWarnings(warnings, 'observer-not-function');
-    assert.equal(w.length, 2);
-    // An observer that exists but is string-valued declared in properties
+    assert.equal(w.length, 4);
+    // An observer declared in observers that is a number
     var first = w[0];
-    // An observer in properties that doesn't exist
+    // An observer declared in observers that doesn't exist
     var second = w[1];
-    // // An observer declared in observers that is a number
-    // var third = w[2];
-    assert.equal(first.location.line, 35);
-    assert.equal(first.location.column, 5);
-    assert.include(first.message, '_brokenObserverChanged');
-    assert.equal(second.location.line, 29);
-    assert.equal(second.location.column, 19);
-    assert.include(second.message, '_brokenObserver2Changed');
-    // assert.equal(second.location.line, 35);
-    // assert.equal(second.location.column, 7);
-    // assert.include(second.message, '_computeValue');
+    // An observer that exists but is string-valued declared in properties
+    var third = w[2];
+    // An observer in properties that doesn't exist
+    var fourth = w[3];
+    assert.equal(first.location.line, 33);
+    assert.equal(first.location.column, 7);
+    assert.include(first.message, '_computeValue');
+    assert.equal(second.location.line, 34);
+    assert.equal(second.location.column, 7);
+    assert.include(second.message, '_computeValuez');
+    assert.equal(third.location.line, 36);
+    assert.equal(third.location.column, 5);
+    assert.include(third.message, '_brokenObserverChanged');
+    assert.equal(fourth.location.line, 29);
+    assert.equal(fourth.location.column, 19);
+    assert.include(fourth.message, '_brokenObserver2Changed');
   });
 
   test('string-literals', function() {
