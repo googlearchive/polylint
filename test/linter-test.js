@@ -154,4 +154,13 @@ suite('Linter', function() {
     });
   });
 
+  test('a11y attributes', function() {
+    var w = findWarnings(warnings, 'a11y-attributes');
+    assert.equal(w.length, 1);
+    // aria-label is bound to a property with $=
+    var first = w[0];
+    assert.equal(first.location.line, 12);
+    assert.include(first.message, 'aria-label');
+  });
+
 });
