@@ -16,6 +16,7 @@ var colors = require('colors/safe');
 var cliArgs = require("command-line-args");
 var fs = require('fs');
 var pathIsAbsolute = require('path-is-absolute');
+var path = require('path');
 
 var cli = cliArgs([
   {
@@ -169,6 +170,28 @@ process.on('unhandledRejection', function(reason, p) {
   console.error("Unhandled Rejection at: Promise ", p, " reason: ", reason);
   fatalFailureOccurred = true;
 });
+
+// Find the bower dir.
+var parentDirs = [];
+var foundBower = false;
+while (!foundBower) {
+  var candidatePath = path.resolve.apply(undefined, [options.root].concat(parentDirs).concat([options.bowerdir]));
+  if (candidatePath == path.join('/', options.bowerdir)) {
+    break;
+  }
+  try {
+    fs.statSync(candidatePath);
+    foundBower = true;
+  } catch (err) {
+    parentDirs.push('..');
+  }
+}
+if (!foundBower) {
+  options.bowerdir = undefined;
+} else {
+  options.bowerdir = path.join(path.join.apply(undefined, parentDirs), options.bowerdir);
+}
+
 
 var lintPromise = Promise.resolve(true);
 for(var i = 0; i < inputs.length; i++) {
