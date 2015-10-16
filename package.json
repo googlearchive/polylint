@@ -1,6 +1,6 @@
 {
   "name": "polylint",
-  "version": "2.3.2",
+  "version": "2.4.1",
   "description": "Keeps your Polymer Elements clean and functional!",
   "main": "polylint.js",
   "bin": "bin/polylint.js",
@@ -12,7 +12,7 @@
     "url": "https://github.com/PolymerLabs/polylint.git"
   },
   "author": "The Polymer Project Authors",
-  "license": "http://polymer.github.io/LICENSE.txt",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/PolymerLabs/polylint/issues"
   },
@@ -25,6 +25,7 @@
     "estraverse": "^4.1.0",
     "hydrolysis": "^1.17.0",
     "optimist": "^0.6.1",
+    "path-is-absolute": "^1.0.0",
     "pegjs": "^0.8.0"
   },
   "devDependencies": {
