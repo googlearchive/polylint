@@ -183,7 +183,13 @@ while (!foundBower) {
     fs.statSync(candidatePath);
     foundBower = true;
   } catch (err) {
+    var currDir = path.resolve.apply(undefined, parentDirs);
     parentDirs.push('..');
+    var parentDir = path.resolve.apply(undefined, parentDirs);
+    if (currDir == parentDir) {
+      // we've reach the root directory
+      break;
+    }
   }
 }
 if (!foundBower) {
