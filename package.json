@@ -21,6 +21,8 @@
     "colors": "^1.1.0",
     "command-line-args": "^1.0.0",
     "dom5": "^1.0.2",
+    "espree": "^2.2.5",
+    "estraverse": "^4.1.0",
     "hydrolysis": "^1.19.2",
     "optimist": "^0.6.1",
     "path-is-absolute": "^1.0.0",

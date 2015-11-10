@@ -161,10 +161,12 @@ function prettyPrintWarning(warning) {
   console.log(warningText);
 }
 
-process.on('uncaughtException', function(err) {
-  console.error('Uncaught exception: ', err);
+function handleExceptionFromPromise(err) {
+  console.error('Uncaught exception: ', err.stack);
   fatalFailureOccurred = true;
-});
+}
+
+process.on('uncaughtException', handleExceptionFromPromise);
 
 process.on('unhandledRejection', function(reason, p) {
   console.error("Unhandled Rejection at: Promise ", p, " reason: ", reason);
@@ -206,33 +208,36 @@ for(var i = 0; i < inputs.length; i++) {
   }
 
   // Finally invoke the analyzer.
-  lintPromise = lintPromise.then(function() {
-    return polylint(
-      input,
-      {
-        root: root,
-        jsconfPolicy: jsconfPolicyPromise,
-        redirect: options.bowerdir
-      }
-    )
-  })
-  .then(function(lintWarnings){
-    lintWarnings.forEach(function(warning){
-      // If specified, ignore errors from our transitive dependencies.
-      if (options['no-recursion'] && input !== warning.filename) {
-        return;
-      }
-      prettyPrintWarning(warning);
-    });
-  })
-  .catch(function(err){
-    console.error(err.stack);
-      fatalFailureOccurred = true;
+  lintPromise = lintPromise
+    .then(function() {
+      return polylint(
+        input,
+        {
+          root: root,
+          jsconfPolicy: jsconfPolicyPromise,
+          redirect: options.bowerdir
+        }
+      );
+    })
+    .then(function(lintWarnings){
+      lintWarnings.forEach(function(warning){
+        // If specified, ignore errors from our transitive dependencies.
+        if (options['no-recursion'] && input !== warning.filename) {
+          return;
+        }
+        prettyPrintWarning(warning);
+      });
+    })
+    .catch(handleExceptionFromPromise);
+}
+
+function exit() {
+  process.exit(fatalFailureOccurred ? 1 : 0);
+};
+
+lintPromise
+  .then(exit)
+  .catch(function (err) {
+    handleExceptionFromPromise(err);
+    exit();
   });
-}
-
-var exit = function(){
-    process.exit(fatalFailureOccurred ? 1 : 0);
-}
-
-lintPromise.then(exit).catch(exit);
