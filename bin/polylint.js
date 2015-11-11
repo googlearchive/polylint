@@ -17,6 +17,11 @@ var cliArgs = require("command-line-args");
 var fs = require('fs');
 var pathIsAbsolute = require('path-is-absolute');
 var path = require('path');
+// jshint -W079
+var Promise = global.Promise || require('es6-promise').Promise;
+// jshint +W079
+
+console.log(process.argv);
 
 var cli = cliArgs([
   {
@@ -57,8 +62,8 @@ var cli = cliArgs([
     defaultValue: '',
     alias: "r",
     description: (
-      "Root directory against which URLs in inputs are resolved."
-        + "  If not specified, then the current working directory is used."
+      "Root directory against which URLs in inputs are resolved." +
+      "  If not specified, then the current working directory is used."
     )
   },
   {
@@ -69,8 +74,15 @@ var cli = cliArgs([
     multiple: true,
     description: (
       "Polymer source files."
-        + "  If a directory is specified, it is used as the root"
-        + " for resolving relative URLs in the next input."
+    )
+  },
+  {
+    name: "stdin",
+    type: Boolean,
+    defaultValue: false,
+    description: (
+      "If true, the file from `input` will be replaced by the contents of stdin." +
+      " If true, only one value will be accepted for input."
     )
   },
   {
@@ -102,6 +114,11 @@ var policyPath = options.policy;
 
 if (!inputs || !inputs.length) {
   console.error('Missing input polymer path');
+  inputsOk = false;
+}
+
+if (options.stdin && inputs.length !== 1) {
+  console.error('Only one input supported in stdin mode');
   inputsOk = false;
 }
 
@@ -200,6 +217,30 @@ if (!foundBower) {
 
 
 var lintPromise = Promise.resolve(true);
+var content;
+
+if (options.stdin) {
+  content = "";
+  lintPromise = lintPromise.then(function(){
+    return new Promise(function(resolve, reject) {
+      process.stdin.setEncoding('utf8');
+      process.stdin.on('readable', function() {
+        var chunk = process.stdin.read();
+        if (chunk !== null) {
+          content += chunk;
+        }
+      });
+      process.stdin.on('end', function() {
+        console.log("Read stdin!");
+        resolve(true);
+      });
+    });
+  });
+} else {
+  content = undefined;
+}
+
+/*jshint -W083 */
 for(var i = 0; i < inputs.length; i++) {
   // Check whether input is a root directory before picking a root and
   // a path to process.
@@ -213,14 +254,16 @@ for(var i = 0; i < inputs.length; i++) {
 
   // Finally invoke the analyzer.
   lintPromise = lintPromise.then(function() {
+    console.log("after stdin promise");
     return polylint(
       input,
       {
         root: root,
         jsconfPolicy: jsconfPolicyPromise,
-        redirect: options.bowerdir
+        redirect: options.bowerdir,
+        content: content
       }
-    )
+    );
   })
   .then(function(lintWarnings){
     lintWarnings.forEach(function(warning){
@@ -236,9 +279,10 @@ for(var i = 0; i < inputs.length; i++) {
       fatalFailureOccurred = true;
   });
 }
+/*jshint +W083 */
 
 var exit = function(){
     process.exit(fatalFailureOccurred ? 1 : 0);
-}
+};
 
 lintPromise.then(exit).catch(exit);
