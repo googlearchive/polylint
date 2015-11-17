@@ -21,8 +21,6 @@ var path = require('path');
 var Promise = global.Promise || require('es6-promise').Promise;
 // jshint +W079
 
-console.log(process.argv);
-
 var cli = cliArgs([
   {
     name: "help",
@@ -254,7 +252,6 @@ for(var i = 0; i < inputs.length; i++) {
 
   // Finally invoke the analyzer.
   lintPromise = lintPromise.then(function() {
-    console.log("after stdin promise");
     return polylint(
       input,
       {
