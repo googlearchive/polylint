@@ -237,12 +237,7 @@ if (options.stdin) {
   content = undefined;
 }
 
-/*jshint -W083 */
-for(var i = 0; i < inputs.length; i++) {
-  // Check whether input is a root directory before picking a root and
-  // a path to process.
-  var input = inputs[i];
-
+inputs.forEach(function(input){
   // If root has been set by cwd and input is an absolute path that begins with the cwd path,
   // strip the root part of the input path to make the FS resolver not duplicate the root path
   if (!options.root && input.indexOf(root) === 0 && pathIsAbsolute(input)) {
@@ -265,6 +260,7 @@ for(var i = 0; i < inputs.length; i++) {
     lintWarnings.forEach(function(warning){
       // If specified, ignore errors from our transitive dependencies.
       if (options['no-recursion'] && input !== warning.filename) {
+        console.log("skipping");
         return;
       }
       prettyPrintWarning(warning);
@@ -274,8 +270,7 @@ for(var i = 0; i < inputs.length; i++) {
     console.error(err.stack);
       fatalFailureOccurred = true;
   });
-}
-/*jshint +W083 */
+});
 
 var exit = function(){
     process.exit(fatalFailureOccurred ? 1 : 0);
