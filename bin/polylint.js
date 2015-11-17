@@ -229,7 +229,6 @@ if (options.stdin) {
         }
       });
       process.stdin.on('end', function() {
-        console.log("Read stdin!");
         resolve(true);
       });
     });
