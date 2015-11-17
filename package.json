@@ -5,7 +5,7 @@
   "main": "polylint.js",
   "bin": "bin/polylint.js",
   "scripts": {
-    "test": "node_modules/.bin/jshint polylint.js bin lib test && node_modules/.bin/mocha test/test.js"
+    "test": "bower install && node_modules/.bin/jshint polylint.js bin lib test && node_modules/.bin/mocha test/test.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "pegjs": "^0.8.0"
   },
   "devDependencies": {
+    "bower": "^1.6.5",
     "chai": "^2.3.0",
     "jshint": "^2.7.0",
     "mocha": "^2.2.4"

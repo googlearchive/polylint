@@ -168,4 +168,12 @@ suite('Linter', function() {
     assert.include(first.message, 'aria-label');
   });
 
+  test('whitespace', function() {
+    var w = findWarnings(warnings, 'whitespace');
+    assert.equal(w.length, 1);
+    var first = w[0];
+    assert.equal(first.location.line, 13);
+    assert.include(first.message, 'whiteSpaceNamez');
+  });
+
 });
