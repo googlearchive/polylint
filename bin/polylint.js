@@ -75,6 +75,23 @@ var cli = cliArgs([
     )
   },
   {
+    name: "config-file",
+    type: String,
+    defaultValue: "bower.json",
+    description: (
+      "If inputs are specified, look for `config-field` in this JSON file."
+    )
+  },
+  {
+    name: "config-field",
+    type: String,
+    defaultValue: "main",
+    description: (
+      "If config-file is used for inputs, this field determines which " +
+      "file(s) are linted."
+    )
+  },
+  {
     name: "stdin",
     type: Boolean,
     defaultValue: false,
@@ -111,8 +128,27 @@ var inputs = options.input;
 var policyPath = options.policy;
 
 if (!inputs || !inputs.length) {
-  console.error('Missing input polymer path');
-  inputsOk = false;
+  if (options['config-file'] && options['config-field']) {
+    try {
+      var contents = fs.readFileSync(options['config-file']);
+      var field = options['config-field'];
+      contents = JSON.parse(contents);
+      if (contents[field] === undefined) {
+        inputs = [];
+        inputsOk = false;
+      } else if (Array.isArray(contents[field])) {
+        inputs = contents[field];
+      } else {
+        inputs = [contents[field]];
+      }
+    } catch (err) {
+      console.error(
+          "No input specified and no '" + field + "' found in '" +
+          options['config-file'] + "'!"
+      );
+      inputsOk = false;
+    }
+  }
 }
 
 if (options.stdin && inputs.length !== 1) {
@@ -260,7 +296,6 @@ inputs.forEach(function(input){
     lintWarnings.forEach(function(warning){
       // If specified, ignore errors from our transitive dependencies.
       if (options['no-recursion'] && input !== warning.filename) {
-        console.log("skipping");
         return;
       }
       prettyPrintWarning(warning);
