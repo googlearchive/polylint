@@ -155,7 +155,7 @@ var root = options.root || process.cwd();
 // This removes any ambiguity between URL resolution rules and file path
 // resolution which might lead to confusion.
 if (root !== '' && !/[\/\\]$/.test(root)) {
-  root += '/';
+  root += path.sep;
 }
 
 
