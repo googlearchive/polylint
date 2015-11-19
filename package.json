@@ -19,7 +19,7 @@
   "homepage": "https://github.com/PolymerLabs/polylint",
   "dependencies": {
     "colors": "^1.1.0",
-    "command-line-args": "^1.0.0",
+    "command-line-args": "^2.1.1",
     "dom5": "^1.0.2",
     "hydrolysis": "^1.21.4",
     "optimist": "^0.6.1",
