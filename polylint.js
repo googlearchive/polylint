@@ -31,7 +31,11 @@ var polylint = function polylint(path, options) {
   if (!('redirect' in options)) {
     options.redirect = "bower_components";
   }
-  return hydrolysis.Analyzer.analyze(path, options).then(function(analyzer){
+  var analyzer;
+  return hydrolysis.Analyzer.analyze(path, options).then(function(_analyzer){
+    analyzer = _analyzer;
+    return analyzer.html[path].depsLoaded;
+  }).then(function(){
     var allWarnings = [];
     for (var linterName in linters) {
       var linter = linters[linterName];
