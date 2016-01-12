@@ -116,6 +116,10 @@ suite('Linter', function() {
     assert.include(second.message, 'stringProp2');
   });
 
+  test('number-literal', function() {
+    var w = findWarnings(warnings, 'number-literals');
+    assert.equal(w.length, 0);
+  });
 
   // TODO(ajo): Parse observers in observers: []
   test('observer-not-function', function() {
