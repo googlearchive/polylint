@@ -21,10 +21,10 @@
     "colors": "^1.1.0",
     "command-line-args": "^2.1.1",
     "dom5": "^1.0.2",
+    "es6-set": "^0.1.4",
     "hydrolysis": "^1.21.4",
     "optimist": "^0.6.1",
-    "path-is-absolute": "^1.0.0",
-    "pegjs": "^0.8.0"
+    "path-is-absolute": "^1.0.0"
   },
   "devDependencies": {
     "bower": "^1.6.5",
