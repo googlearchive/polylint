@@ -108,10 +108,10 @@ suite('Linter', function() {
     assert.equal(w.length, 2);
     var first = w[0];
     var second = w[1];
-    assert.equal(first.location.line, 14);
+    assert.equal(first.location.line, 15);
     assert.equal(first.location.column, 3);
     assert.include(first.message, 'stringProp1');
-    assert.equal(second.location.line, 15);
+    assert.equal(second.location.line, 16);
     assert.equal(second.location.column, 3);
     assert.include(second.message, 'stringProp2');
   });
