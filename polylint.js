@@ -36,6 +36,18 @@ var polylint = function polylint(path, options) {
     analyzer = _analyzer;
     return analyzer.html[path].depsLoaded;
   }).then(function(){
+
+    //Load custom modules rules
+    if(options.modules && options.modules.length > 0){
+      options.modules.forEach(function(module){
+        var customRules = require(module);
+        //merge custom rules with linters object
+        for (var attrname in customRules) {
+           linters[attrname] = customRules[attrname];
+        }
+      });
+    }
+
     var allWarnings = [];
     for (var linterName in linters) {
       var linter = linters[linterName];
