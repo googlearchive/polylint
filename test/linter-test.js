@@ -65,6 +65,11 @@ suite('Linter', function() {
     assert.include(warning.message, 'myVar');
   });
 
+  test('compound-binding', function() {
+    var w = findWarnings(warnings, 'compound-binding');
+    assert.equal(w.length, 0);
+  });
+
   test('computed-binding', function() {
     var w = findWarnings(warnings, 'computed-binding');
     assert.equal(w.length, 2);
