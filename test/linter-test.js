@@ -65,15 +65,6 @@ suite('Linter', function() {
     assert.include(warning.message, 'myVar');
   });
 
-  test('compound-binding', function() {
-    var w = findWarnings(warnings, 'compound-binding');
-    assert.equal(w.length, 1);
-    var warning = w[0];
-    assert.equal(warning.location.line, 14);
-    assert.equal(warning.location.column, 11);
-    assert.include(warning.message, 'nestedz');
-  });
-
   test('computed-binding', function() {
     var w = findWarnings(warnings, 'computed-binding');
     assert.equal(w.length, 2);
@@ -145,6 +136,15 @@ suite('Linter', function() {
     assert.equal(fourth.location.line, 29);
     assert.equal(fourth.location.column, 19);
     assert.include(fourth.message, '_brokenObserver2Changed');
+  });
+
+  test('property-not-found', function() {
+    var w = findWarnings(warnings, 'property-not-found');
+    assert.equal(w.length, 1);
+    var warning = w[0];
+    assert.equal(warning.location.line, 14);
+    assert.equal(warning.location.column, 11);
+    assert.include(warning.message, 'nestedz');
   });
 
   test('string-literals', function() {
