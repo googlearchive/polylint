@@ -65,6 +65,11 @@ suite('Linter', function() {
     assert.include(warning.message, 'myVar');
   });
 
+  test('braces-in-string-literals', function() {
+    var w = findWarnings(warnings, 'braces-in-string-literals');
+    assert.equal(w.length, 0);
+  });
+
   test('compound-binding', function() {
     var w = findWarnings(warnings, 'compound-binding');
     assert.equal(w.length, 1);
