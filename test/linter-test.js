@@ -16,7 +16,7 @@ function findWarnings(warningList, filename) {
   var warnings = [];
   for (var i = 0; i < warningList.length; i++) {
     var warning = warningList[i];
-    if (warning.filename.indexOf(filename) >= 0) {
+    if (filename === path.basename(warning.filename, '.html')) {
       warnings.push(warning);
     }
   }
