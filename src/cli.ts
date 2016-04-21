@@ -77,7 +77,8 @@ export function runWithOptions(options) {
       if (options['config-file'] && options['config-field']) {
         const field = options['config-field'];
         try {
-          var contents:any = fs.readFileSync(options['config-file']);
+          //TODO: This any is bad, but no other types work. Defn for readFileSync on fs may need updating.
+          let contents:any = fs.readFileSync(options['config-file']);
           contents = JSON.parse(contents);
           if (contents[field] === undefined) {
             inputs = [];

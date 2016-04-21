@@ -19,10 +19,10 @@
  * @param {string} raw  The unparsed expression
  */
 class ParsedExpression{
-  public keys:Array<string>;
-  public methods:Array<string>;
-  public type:string;
-  public raw:string;
+  public keys?:Array<string>;
+  public methods?:Array<string>;
+  public type?:string;
+  public raw?:string;
 
   constructor(){}
 }
@@ -99,8 +99,7 @@ export class ExpressionParser{
     return parsed;
   }
 
-
-  _parseMethod(expression:string) {
+  _parseMethod(expression:string): Signature {
     var m = expression.match(/(\w*)\((.*)\)/);
     if (m) {
       let sig:Signature = { method: m[1], static: true };
