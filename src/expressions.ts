@@ -19,12 +19,7 @@
  * @param {string} raw  The unparsed expression
  */
 class ParsedExpression{
-  keys:Array<string>;
-  methods:Array<string>;
-  type:string;
-  raw:string;
-
-  constructor(){}
+  constructor(public keys?:Array<string>, public methods?:Array<string>, public type?:string, public raw?:string){}
 }
 
 interface Signature{
@@ -68,7 +63,7 @@ export class ExpressionParser{
 
   constructor(){}
 
-  extractBindingExpression(text:string) {
+  extractBindingExpression(text:string): string {
     var match = text.match(/\{\{(.*)\}\}/) || text.match(/\[\[(.*)\]\]/);
     var expression;
     if (match && match.length === 2) {
@@ -81,7 +76,7 @@ export class ExpressionParser{
     return expression;
   }
 
-  parseExpression(expression:string) {
+  parseExpression(expression:string): ParsedExpression {
     var parsed = new ParsedExpression();
     parsed.raw = expression;
 
@@ -99,13 +94,13 @@ export class ExpressionParser{
     return parsed;
   }
 
-  _parseMethod(expression:string) {
+  _parseMethod(expression:string): Signature {
     var m = expression.match(/(\w*)\((.*)\)/);
     if (m) {
-      var sig:Signature = { method: m[1], static: true };
+      let sig:Signature = { method: m[1], static: true };
       if (m[2].trim()) {
         // replace escaped commas with comma entity, split on un-escaped commas
-        var args = m[2].replace(/\\,/g, '&comma;').split(',');
+        let args = m[2].replace(/\\,/g, '&comma;').split(',');
         return this._parseArgs(args, sig);
       } else {
         sig.args = [];
@@ -114,9 +109,9 @@ export class ExpressionParser{
     }
   }
 
-  _parseArgs(argList:Array<String>, sig:Signature){
+  _parseArgs(argList:Array<String>, sig:Signature): Signature{
     sig.args = argList.map(function(rawArg) {
-      var arg = this._parseArg(rawArg);
+      let arg = this._parseArg(rawArg);
       if (!arg.literal) {
         sig.static = false;
       }
@@ -125,7 +120,7 @@ export class ExpressionParser{
     return sig;
   }
 
-  _parseArg(rawArg:string) {
+  _parseArg(rawArg:string): Argument {
     // clean up whitespace
     var arg = rawArg.trim()
       // replace comma entity with comma

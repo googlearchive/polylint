@@ -135,15 +135,15 @@ export function runWithOptions(options) {
   return new Promise(function(resolve, reject) {
     // Check options and dump usage if we find problems.
     var inputsOk = true;
-
     var inputs = options.input;
     var policyPath = options.policy;
 
     if (!inputs || !inputs.length) {
       if (options['config-file'] && options['config-field']) {
-        var field = options['config-field'];
+        const field = options['config-field'];
         try {
-          var contents:any = fs.readFileSync(options['config-file']);
+          //TODO: This any is bad, but no other types work. Defn for readFileSync on fs may need updating.
+          let contents:any = fs.readFileSync(options['config-file']);
           contents = JSON.parse(contents);
           if (contents[field] === undefined) {
             inputs = [];
@@ -217,7 +217,7 @@ export function runWithOptions(options) {
       if (warning.fatal) {
         fatalFailureOccurred = true;
       }
-      var warningText = colors.red(warning.filename) + ":" +
+      const warningText = colors.red(warning.filename) + ":" +
                         warning.location.line + ":" + warning.location.column +
                         "\n    " + colors.gray(warning.message);
       console.log(warningText);
@@ -237,7 +237,7 @@ export function runWithOptions(options) {
     var parentDirs = [];
     var foundBower = false;
     while (!foundBower) {
-      var candidatePath = path.resolve.apply(undefined, [options.root].concat(parentDirs).concat([options.bowerdir]));
+      const candidatePath = path.resolve.apply(undefined, [options.root].concat(parentDirs).concat([options.bowerdir]));
       if (candidatePath == path.join('/', options.bowerdir)) {
         break;
       }
@@ -245,9 +245,9 @@ export function runWithOptions(options) {
         fs.statSync(candidatePath);
         foundBower = true;
       } catch (err) {
-        var currDir = path.resolve.apply(undefined, parentDirs);
+        const currDir = path.resolve.apply(undefined, parentDirs);
         parentDirs.push('..');
-        var parentDir = path.resolve.apply(undefined, parentDirs);
+        const parentDir = path.resolve.apply(undefined, parentDirs);
         if (currDir == parentDir) {
           // we've reach the root directory
           break;
@@ -261,7 +261,7 @@ export function runWithOptions(options) {
     }
 
 
-    var lintPromise: Promise<any> = Promise.resolve(true);
+    var lintPromise: Promise<boolean|void|{}> = Promise.resolve(true);
     var content;
 
     if (options.stdin) {
@@ -270,7 +270,7 @@ export function runWithOptions(options) {
         return new Promise(function(resolve, reject) {
           process.stdin.setEncoding('utf8');
           process.stdin.on('readable', function() {
-            var chunk = process.stdin.read();
+            const chunk = process.stdin.read();
             if (chunk !== null) {
               content += chunk;
             }
