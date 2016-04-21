@@ -8,6 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 // jshint node:true
+// jshint esversion: 6
 'use strict';
 
 /**
@@ -17,12 +18,28 @@
  * @param {string} type One of 'computed', 'literal', or 'reference'
  * @param {string} raw  The unparsed expression
  */
-var ParsedExpression = function ParsedExpression(keys, methods, type, raw) {
-  this.keys = keys;
-  this.methods = methods;
-  this.type = type;
-  this.raw = raw;
-};
+class ParsedExpression{
+  keys:Array<string>;
+  methods:Array<string>;
+  type:string;
+  raw:string;
+
+  constructor(){}
+}
+
+interface Signature{
+    method: string;
+    static: boolean;
+    args?: Array<string>;
+ }
+
+interface Argument{
+    name: string;
+    value?: string|number;
+    literal?: boolean;
+    structured?: boolean;
+    wildcard?: boolean;
+}
 
 
 function primaryName(expression) {
@@ -47,15 +64,11 @@ function primaryName(expression) {
   return name;
 }
 
+export class ExpressionParser{
 
+  constructor(){}
 
-var ExpressionParser = function ExpressionParser() {
-};
-
-
-ExpressionParser.prototype = {
-
-  extractBindingExpression: function (text) {
+  extractBindingExpression(text:string) {
     var match = text.match(/\{\{(.*)\}\}/) || text.match(/\[\[(.*)\]\]/);
     var expression;
     if (match && match.length === 2) {
@@ -66,9 +79,9 @@ ExpressionParser.prototype = {
       expression = expression.trim();
     }
     return expression;
-  },
+  }
 
-  parseExpression: function(expression) {
+  parseExpression(expression:string) {
     var parsed = new ParsedExpression();
     parsed.raw = expression;
 
@@ -84,11 +97,12 @@ ExpressionParser.prototype = {
       parsed.keys = [primaryName(unwrapped)];
     }
     return parsed;
-  },
-  _parseMethod: function(expression) {
+  }
+
+  _parseMethod(expression:string) {
     var m = expression.match(/(\w*)\((.*)\)/);
     if (m) {
-      var sig = { method: m[1], static: true };
+      var sig:Signature = { method: m[1], static: true };
       if (m[2].trim()) {
         // replace escaped commas with comma entity, split on un-escaped commas
         var args = m[2].replace(/\\,/g, '&comma;').split(',');
@@ -98,8 +112,9 @@ ExpressionParser.prototype = {
         return sig;
       }
     }
-  },
-  _parseArgs: function(argList, sig) {
+  }
+
+  _parseArgs(argList:Array<String>, sig:Signature){
     sig.args = argList.map(function(rawArg) {
       var arg = this._parseArg(rawArg);
       if (!arg.literal) {
@@ -108,8 +123,9 @@ ExpressionParser.prototype = {
       return arg;
     }, this);
     return sig;
-  },
-  _parseArg: function(rawArg) {
+  }
+
+  _parseArg(rawArg:string) {
     // clean up whitespace
     var arg = rawArg.trim()
       // replace comma entity with comma
@@ -120,7 +136,7 @@ ExpressionParser.prototype = {
       .replace(/\\(.)/g, '\$1')
       ;
     // basic argument descriptor
-    var a = {
+    var a:Argument = {
       name: arg
     };
     // detect literal value (must be String or Number)
@@ -152,8 +168,4 @@ ExpressionParser.prototype = {
     }
     return a;
   }
-};
-
-module.exports = {
-  ExpressionParser: ExpressionParser
-};
+}

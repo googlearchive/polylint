@@ -8,9 +8,11 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 // jshint node:true
+// jshint esversion: 6
 'use strict';
-var hydrolysis = require('hydrolysis');
-var linters = require('./lib/linters');
+
+import * as hydrolysis from 'hydrolysis';
+import {linters} from './linters';
 
 /**
  * Lint the file at path and return warnings.
@@ -20,7 +22,7 @@ var linters = require('./lib/linters');
  * @return {Promise<Array.<Object>>} A promise that resolves to a list of
  *     potential problems in `href`.
  */
-var polylint = function polylint(path, options) {
+export function polylint(path, options) {
   if (!options) {
     options = {};
   }
@@ -40,12 +42,11 @@ var polylint = function polylint(path, options) {
     for (var linterName in linters) {
       var linter = linters[linterName];
       var warnings = linter(analyzer, path, options);
+
       allWarnings = allWarnings.concat(warnings);
     }
     return allWarnings;
   }).catch(function(err){
     throw err;
   });
-};
-
-module.exports = polylint;
+}
