@@ -50,5 +50,3 @@ export function polylint(path, options) {
     throw err;
   });
 }
-
-module.exports = polylint;

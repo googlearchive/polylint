@@ -22,14 +22,10 @@ import pathIsAbsolute = require('path-is-absolute');
 //Trying to import this the TS leads to some really strange errors
 var colors = require('colors/safe');
 
-// jshint -W079
-//var Promise = global.Promise || require('es6-promise').Promise;
-// jshint +W079
-
 var argumentDefinitions = require('./args').argumentDefinitions;
 var logger = logging.getLogger('lint.cli');
 
-var cli = cliArgs(argumentDefinitions);
+const cli = cliArgs(argumentDefinitions);
 
 var usage = cli.getUsage({
   header: "polylint checks Polymer apps for problematic code patterns",
@@ -81,8 +77,7 @@ export function runWithOptions(options) {
       if (options['config-file'] && options['config-field']) {
         const field = options['config-field'];
         try {
-          //TODO: This any is bad, but no other types work. Defn for readFileSync on fs may need updating.
-          let contents:any = fs.readFileSync(options['config-file']);
+          var contents:any = fs.readFileSync(options['config-file']);
           contents = JSON.parse(contents);
           if (contents[field] === undefined) {
             inputs = [];

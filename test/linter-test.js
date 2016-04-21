@@ -29,7 +29,7 @@ suite('Linter', function() {
   var polylint = require('../lib/polylint');
   var warnings;
   before(function(done) {
-    polylint(testTarget, {root: path.join(__dirname, '..')}).then(function(linterWarnings){
+    polylint.polylint(testTarget, {root: path.join(__dirname, '..')}).then(function(linterWarnings){
       warnings = linterWarnings;
      console.log(warnings);
       done();
