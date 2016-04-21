@@ -2,10 +2,10 @@
   "name": "polylint",
   "version": "2.10.1",
   "description": "Keeps your Polymer Elements clean and functional!",
-  "main": "polylint.js",
-  "bin": "bin/polylint.js",
+  "main": "lib/polylint.js",
+  "bin": "lib/polylint-bin.js",
   "scripts": {
-    "test": "bower install && node_modules/.bin/jshint polylint.js bin lib test && node_modules/.bin/mocha test/test.js"
+    "test": "bower install && node_modules/.bin/jshint test && node_modules/.bin/mocha test/test.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,8 @@
     "es6-set": "^0.1.4",
     "hydrolysis": "^1.21.4",
     "optimist": "^0.6.1",
-    "path-is-absolute": "^1.0.0"
+    "path-is-absolute": "^1.0.0",
+    "typings": "^0.8.1"
   },
   "devDependencies": {
     "bower": "^1.6.5",

@@ -8,6 +8,7 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 // jshint node:true
+// jshint esversion: 6
 'use strict';
 
 
@@ -47,18 +48,19 @@
  *
  * @enum{number}
  */
-var Type = {
-  CUSTOM: 1,
-  BANNED_DEPENDENCY: 2,
-  BANNED_NAME: 3,
-  BANNED_PROPERTY: 4,
-  BANNED_PROPERTY_READ: 5,
-  BANNED_PROPERTY_WRITE: 6,
-  RESTRICTED_NAME_CALL: 7,
-  RESTRICTED_METHOD_CALL: 8,
-  BANNED_CODE_PATTERN: 9,
-  BANNED_PROPERTY_CALL: 10
-};
+
+export enum Type {
+  CUSTOM = 1,
+  BANNED_DEPENDENCY,
+  BANNED_NAME,
+  BANNED_PROPERTY,
+  BANNED_PROPERTY_READ,
+  BANNED_PROPERTY_WRITE,
+  RESTRICTED_NAME_CALL,
+  RESTRICTED_METHOD_CALL,
+  BANNED_CODE_PATTERN,
+  BANNED_PROPERTY_CALL
+}
 
 /**
  * @param {*} typeName
@@ -217,64 +219,93 @@ function optionalPathFilterFunction(opts) {
  *   rule_id: ?string,
  * }
  */
-var RequirementSpec;
+interface RequirementSpec {
+  error_message?: string;
+  whitelist?: Array<string>;
+  whitelist_regexp?: Array<string>;
+  only_apply_to?: Array<string>;
+  only_apply_to_regexp?: Array<string>;
+  type?: Type;
+  value?: Array<string>;
+  js_module?: string;
+  rule_id?: string;
+}
 
 /**
  * @param {!RequirementSpec} spec
  * @constructor
  */
-function Requirement(spec) {
-  /** @type {string|null} */
-  this.error_message = optionalString(spec.error_message);
-  /** @type {Function<string>:boolean|null} */
-  this.exclude = optionalPathFilterFunction(
-    { values: spec.whitelist,     regexps: spec.whitelist_regexp });
-  /** @type {Function<string>:boolean|null} */
-  this.include = optionalPathFilterFunction(
-    { values: spec.only_apply_to, regexps: spec.only_apply_to_regexp });
-  if (this.include && this.exclude) {
-    throw new Error(
-        'Requirement cannot specify both whtielist* and only_apply_to*: ' +
-        JSON.stringify(spec));
-  }
-  /** @type {number|null} */
-  this.type = optionalType(spec.type);
-  /** @type {Object.<string, boolean>|null} */
-  this.js_module = optionalString(spec.js_module);
-  /** @type {string|null} */
-  this.rule_id = optionalString(spec.rule_id);
 
-  if ((this.type === Type.CUSTOM) ^ (this.js_module !== null)) {
-    throw new Error(
-        'Only/all custom requirements may/must have a js_module: ' +
-        JSON.stringify(spec));
-  }
+interface PathFilterFunction{
+  values: Array<string>;
+  regexps: Array<string>;
+}
 
-  /** @type {!Array.<string>} */
-  this.value = optionalStringArray(spec.value) || [];
+export class Requirement {
+  error_message: string;
+  exclude: Function;
+  include: Function;
+  type: Type;
+  js_module: string;
+  rule_id: string;
+  value: Array<string>;
+
+  constructor(spec){
+    /** @type {string|null} */
+    this.error_message = optionalString(spec.error_message);
+    /** @type {Function<string>:boolean|null} */
+    this.exclude = optionalPathFilterFunction(
+      { values: spec.whitelist,     regexps: spec.whitelist_regexp });
+    /** @type {Function<string>:boolean|null} */
+    this.include = optionalPathFilterFunction(
+      { values: spec.only_apply_to, regexps: spec.only_apply_to_regexp });
+    if (this.include && this.exclude) {
+      throw new Error(
+          'Requirement cannot specify both whtielist* and only_apply_to*: ' +
+          JSON.stringify(spec));
+    }
+    /** @type {number|null} */
+    this.type = optionalType(spec.type);
+    /** @type {Object.<string, boolean>|null} */
+    this.js_module = optionalString(spec.js_module);
+    /** @type {string|null} */
+    this.rule_id = optionalString(spec.rule_id);
+
+    if ((this.type === Type.CUSTOM) !== (this.js_module !== null)) {
+      throw new Error(
+          'Only/all custom requirements may/must have a js_module: ' +
+          JSON.stringify(spec));
+    }
+
+    /** @type {!Array.<string>} */
+    this.value = optionalStringArray(spec.value) || [];
+  }
 }
 
 /**
  * @constructor
  */
-function Policy(requirements) {
-  this.requirements = requirements.slice();
-}
+export class Policy {
+  requirements: Array<Requirement>;
+  constructor(requirements){
+    this.requirements = requirements.slice();
+  }
+
 /**
  * @param {string} path
  * @return {!Array.<Requirement>}
  */
-Policy.prototype.applicableTo = function (path) {
-  return this.requirements.filter(
-    function (requirement) {
-      return (
-          (!requirement.include || requirement.include(path)) &&
-          !(requirement.exclude && requirement.exclude(path))
-      );
-    }
-  );
-};
-
+  applicableTo(path) {
+    return this.requirements.filter(
+      function (requirement) {
+        return (
+            (!requirement.include || requirement.include(path)) &&
+            !(requirement.exclude && requirement.exclude(path))
+        );
+      }
+    );
+  }
+}
 /**
  * A policy derived from JSConformance requirements.
  *
@@ -288,7 +319,7 @@ Policy.prototype.applicableTo = function (path) {
  * @return {Policy} A policy that allows finding the set of requirements to
  *    apply to a given file.
  */
-function fromRequirements(conformanceConfig) {
+export function fromRequirements(conformanceConfig) {
   var requirementSpecs = conformanceConfig.requirement;
   if (!Array.isArray(requirementSpecs)) {
     throw new Error(
@@ -299,11 +330,3 @@ function fromRequirements(conformanceConfig) {
   });
   return new Policy(requirements);
 }
-
-
-module.exports = {
-  fromRequirements: fromRequirements,
-  Type: Type,
-  Policy: Policy,
-  Requirement: Requirement
-};
