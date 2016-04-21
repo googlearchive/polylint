@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * @license
  * Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
@@ -9,15 +8,23 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 // jshint node:true
-'use strict';
+// jshint esversion: 6
 
-var cli = require('../lib/cli');
+interface JSLocation{
+  line?: any;
+  column?: any;
+}
 
-process.title = 'polylint';
+export class LintError {
+  filename: string;
+  location: JSLocation;
+  message: string;
+  fatal: boolean;
 
-cli.run(process.env, process.argv.slice(2), process.stdout)
-  .then(function() {
-    process.exit(0);
-  }, function() {
-    process.exit(1);
-  });
+  constructor(filename:string, location:JSLocation, message:string, fatal:boolean){
+    this.filename = filename;
+    this.location = location;
+    this.message = message;
+    this.fatal = fatal;
+  }
+}
