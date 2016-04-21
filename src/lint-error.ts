@@ -11,8 +11,8 @@
 // jshint esversion: 6
 
 interface JSLocation{
-  line?: any;
-  column?: any;
+  line?: number;
+  column?: number;
 }
 
 export class LintError {
