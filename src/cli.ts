@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * @license
  * Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
@@ -9,19 +8,24 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 // jshint node:true
+// jshint esversion: 6
 'use strict';
-var polylint = require('../polylint');
-var jsconf_policy = require('../lib/jsconf-policy');
+import {polylint} from './polylint';
+import * as jsconf_policy from './jsconf-policy';
+import * as cliArgs from "command-line-args";
+import * as fs from 'fs';
+import * as path from 'path';
+import pathIsAbsolute = require('path-is-absolute');
+
+//Trying to import this the TS leads to some really strange errors
 var colors = require('colors/safe');
-var cliArgs = require("command-line-args");
-var fs = require('fs');
-var pathIsAbsolute = require('path-is-absolute');
-var path = require('path');
+
+
 // jshint -W079
-var Promise = global.Promise || require('es6-promise').Promise;
+//var Promise = global.Promise || require('es6-promise').Promise;
 // jshint +W079
 
-var argumentDefinitions = [
+const cli = cliArgs([
   {
     name: "help",
     type: Boolean,
@@ -107,16 +111,14 @@ var argumentDefinitions = [
       "Only report errors on specified input files, not from their dependencies."
     )
   }
-];
-
-var cli = cliArgs(argumentDefinitions);
+]);
 
 var usage = cli.getUsage({
   header: "polylint checks Polymer apps for problematic code patterns",
   title: "polylint"
 });
 
-function run(env, args, stdout) {
+export function run(env, args, stdout) {
   return new Promise(function(resolve, reject) {
     var options = cli.parse();
 
@@ -129,7 +131,7 @@ function run(env, args, stdout) {
   });
 }
 
-function runWithOptions(options) {
+export function runWithOptions(options) {
   return new Promise(function(resolve, reject) {
     // Check options and dump usage if we find problems.
     var inputsOk = true;
@@ -141,7 +143,7 @@ function runWithOptions(options) {
       if (options['config-file'] && options['config-field']) {
         var field = options['config-field'];
         try {
-          var contents = fs.readFileSync(options['config-file']);
+          var contents:any = fs.readFileSync(options['config-file']);
           contents = JSON.parse(contents);
           if (contents[field] === undefined) {
             inputs = [];
@@ -211,7 +213,6 @@ function runWithOptions(options) {
      */
     var fatalFailureOccurred = false;
 
-
     function prettyPrintWarning(warning) {
       if (warning.fatal) {
         fatalFailureOccurred = true;
@@ -260,7 +261,7 @@ function runWithOptions(options) {
     }
 
 
-    var lintPromise = Promise.resolve(true);
+    var lintPromise: Promise<any> = Promise.resolve(true);
     var content;
 
     if (options.stdin) {
@@ -324,9 +325,3 @@ function runWithOptions(options) {
     resolve(lintPromise.then(exit));
   });
 }
-
-module.exports = {
-  run: run,
-  runWithOptions: runWithOptions,
-  argumentDefinitions: argumentDefinitions,
-};

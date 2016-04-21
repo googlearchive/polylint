@@ -1,0 +1,8 @@
+{
+  "ambientDependencies": {
+    "node": "registry:dt/node#4.0.0+20160412142033"
+  },
+  "dependencies": {
+    "path-is-absolute": "registry:npm/path-is-absolute#1.0.0+20160401035413"
+  }
+}

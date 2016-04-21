@@ -8,16 +8,15 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 // jshint node:true
+// jshint esversion: 6
 'use strict';
-var dom5 = require('dom5');
-var Set = require('es6-set');
+
+import * as dom5 from 'dom5';
 var p = dom5.predicates;
 
-var LintError = require('./lint-error');
-var CaseMap = require('./case-map');
-var ExpressionParser = require('./expressions').ExpressionParser;
+import {LintError} from './lint-error';
+import {ExpressionParser} from './expressions';
 
-var caseMap = new CaseMap();
 var expressionParser = new ExpressionParser();
 
 function getDomModules(analyzer, id) {
@@ -82,7 +81,7 @@ function allAttributesInDomModule(analyzer, is) {
       if (node.attrs === undefined) {
         return [];
       }
-      return node.attrs.map(function(attr){
+      return node.attrs.map(function(attr:any){
         attr.node = node;
         return attr;
       });
@@ -195,7 +194,7 @@ function badBindingExpressions(analyzer, is) {
       .concat(attributeBadBindingExpressions(analyzer, is));
 }
 
-var nativeAttributes = new Set(['accesskey',
+var nativeAttributes: Set<string> = new Set(['accesskey',
   'class',
   'contenteditable',
   'contextmenu',
@@ -365,7 +364,7 @@ function lintBindingExpression(parsed,
 
 var isCustomElement = p.hasMatchingTagName(/(.+-)+.+/);
 
-var linters = {
+export var linters = {
   boundVariablesDeclared: function findBindingToClass(analyzer) {
     var undeclaredBindings = [];
     analyzer.elements.forEach(function(element) {
@@ -556,5 +555,3 @@ var linters = {
     return undeclaredBindings;
   }
 };
-
-module.exports = linters;
