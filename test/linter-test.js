@@ -26,10 +26,10 @@ function findWarnings(warningList, filename) {
 var testTarget = 'sample/my-element-collection.html';
 
 suite('Linter', function() {
-  var polylint = require('../polylint');
+  var polylint = require('../lib/polylint');
   var warnings;
   before(function(done) {
-    polylint(testTarget, {root: path.join(__dirname, '..')}).then(function(linterWarnings){
+    polylint.polylint(testTarget, {root: path.join(__dirname, '..')}).then(function(linterWarnings){
       warnings = linterWarnings;
      console.log(warnings);
       done();

@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "preserveConstEnums": true,
+    "moduleResolution": "node",
+    "outDir": "lib",
+    "module": "commonjs"
+  },
+  "filesGlob": [
+    "./**/*.ts",
+    "!./node_modules/**/*.ts"
+  ],
+  "files": [
+    "./custom_typings/command-line-args.d.ts",
+    "./custom_typings/dom5.d.ts",
+    "./custom_typings/hydrolysis.d.ts",
+    "./src/cli.ts",
+    "./src/expressions.ts",
+    "./src/jsconf-policy.ts",
+    "./src/lint-error.ts",
+    "./src/linters.ts",
+    "./src/polylint-bin.ts",
+    "./src/polylint.ts",
+    "./typings/main.d.ts"
+  ],
+  "atom": {
+  }
+}

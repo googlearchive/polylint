@@ -8,11 +8,16 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 // jshint node:true
+// jshint esversion: 6
 'use strict';
-var LintError = function LintError(filename, location, message, fatal) {
-  this.filename = filename;
-  this.location = location;
-  this.message = message;
-  this.fatal = fatal;
-};
-module.exports = LintError;
+
+import * as cli from './cli';
+
+process.title = 'polylint';
+
+cli.run(process.env, process.argv.slice(2), process.stdout)
+  .then(function() {
+    process.exit(0);
+  }, function() {
+    process.exit(1);
+  });
