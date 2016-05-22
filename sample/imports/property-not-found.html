@@ -7,23 +7,23 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<dom-module id="compound-binding">
+<dom-module id="property-not-found">
   <template>
-    <span>{{one}} {{two}}</span>
+    <span>[[nested]]</span>
+    <span>{{nested.this.that.other}}</span>
+    <span>{{!nestedz}}</span>
   </template>
 </dom-module>
 
 <script>
 Polymer({
-  is: 'compound-binding',
+  is: 'property-not-found',
   properties: {
-    one: {
-      type: String,
-      value: 'We\'re in this'
-    },
-    two: {
-      type: String,
-      value: 'together'
+    /**
+     * A super nifty property.
+     */
+    nested: {
+      type: Object
     }
   }
 });
