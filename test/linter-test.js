@@ -38,6 +38,22 @@ suite('Linter', function() {
     });
   });
 
+  test('misspelt-behavior', function() {
+    var w = findWarnings(warnings, 'misspelt-behavior');
+    assert.equal(w.length, 1);
+    var warning = w[0];
+    assert.equal(warning.location.line, 14);
+    assert.equal(warning.location.column, 3);
+  });
+
+  test('behavior-not-defined', function() {
+    var w = findWarnings(warnings, 'behavior-not-defined');
+    assert.equal(w.length, 1);
+    var warning = w[0];
+    assert.equal(warning.location.line, 11);
+    assert.equal(warning.location.column, 1);
+  });
+
   test('bind-to-class', function() {
     var w = findWarnings(warnings, 'bind-to-class');
     assert.equal(w.length, 1);
