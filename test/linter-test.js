@@ -38,6 +38,14 @@ suite('Linter', function() {
     });
   });
 
+  test('camel-case-attributes', function() {
+    var w = findWarnings(warnings, 'camel-case-attributes');
+    assert.equal(w.length, 1);
+    var warning = w[0];
+    assert.equal(warning.location.line, 12);
+    assert.equal(warning.location.column, 5);
+  });
+
   test('bind-to-class', function() {
     var w = findWarnings(warnings, 'bind-to-class');
     assert.equal(w.length, 1);
