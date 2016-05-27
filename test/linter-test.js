@@ -16,7 +16,7 @@ function findWarnings(warningList, filename) {
   var warnings = [];
   for (var i = 0; i < warningList.length; i++) {
     var warning = warningList[i];
-    if (warning.filename.indexOf(filename) >= 0) {
+    if (filename === path.basename(warning.filename, '.html')) {
       warnings.push(warning);
     }
   }
@@ -63,6 +63,11 @@ suite('Linter', function() {
     assert.equal(warning.location.line, 12);
     assert.equal(warning.location.column, 11);
     assert.include(warning.message, 'myVar');
+  });
+
+  test('braces-in-string-literals', function() {
+    var w = findWarnings(warnings, 'braces-in-string-literals');
+    assert.equal(w.length, 0);
   });
 
   test('compound-binding', function() {
