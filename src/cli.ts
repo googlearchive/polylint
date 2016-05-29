@@ -16,7 +16,7 @@ import * as jsconf_policy from './jsconf-policy';
 import * as cliArgs from "command-line-args";
 import * as fs from 'fs';
 import * as path from 'path';
-import * as logging from 'pylog'
+import * as logging from 'plylog'
 import pathIsAbsolute = require('path-is-absolute');
 
 //Trying to import this the TS leads to some really strange errors
