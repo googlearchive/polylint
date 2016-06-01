@@ -23,6 +23,7 @@
     "dom5": "^1.0.2",
     "es6-set": "^0.1.4",
     "hydrolysis": "^1.21.4",
+    "minimatch": "^3.0.0",
     "optimist": "^0.6.1",
     "path-is-absolute": "^1.0.0",
     "plylog": "^0.4.0"
