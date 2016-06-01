@@ -10,6 +10,7 @@
 // jshint node:true
 'use strict';
 var hydrolysis = require('hydrolysis');
+var minimatch = require('minimatch');
 var linters = require('./lib/linters');
 
 /**
@@ -24,9 +25,14 @@ var polylint = function polylint(path, options) {
   if (!options) {
     options = {};
   }
+  if(!options.ignore) {
+    options.ignore = [];
+  }
   options.attachAST = true;
-  options.filter = function(){
-    return false;
+  options.filter = function(filename) {
+    return options.ignore.some(function(glob) {
+      return minimatch(filename, glob);
+    });
   };
   if (!('redirect' in options)) {
     options.redirect = "bower_components";
