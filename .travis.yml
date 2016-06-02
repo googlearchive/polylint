@@ -6,4 +6,5 @@ sudo: false
 before_script:
   - npm install -g bower
   - bower install
+  - typings install
   - tsc
