@@ -14,6 +14,7 @@
     "./custom_typings/command-line-args.d.ts",
     "./custom_typings/dom5.d.ts",
     "./custom_typings/hydrolysis.d.ts",
+    "./custom_typings/plylog.d.ts",
     "./src/cli.ts",
     "./src/expressions.ts",
     "./src/jsconf-policy.ts",
