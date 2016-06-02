@@ -152,6 +152,14 @@ suite('Linter', function() {
     assert.equal(w.length, 0);
   });
 
+  test('style-beyond-template', function() {
+    var w = findWarnings(warnings, 'style-beyond-template');
+    assert.equal(w.length, 1);
+    var first = w[0];
+    assert.equal(first.location.line, 11);
+    assert.include(first.message, 'Style tag');
+  });
+
   test('unbalanced-delimiters', function() {
     var w = findWarnings(warnings, 'unbalanced-delimiters');
     assert.equal(w.length, 4);
