@@ -9,17 +9,21 @@
  */
 
 // jshint node:true
+// jshint esversion: 6
 'use strict';
-var polylint = require('../polylint');
-var jsconf_policy = require('../lib/jsconf-policy');
+import {polylint} from './polylint';
+import * as jsconf_policy from './jsconf-policy';
+import * as cliArgs from "command-line-args";
+import * as fs from 'fs';
+import * as path from 'path';
+import * as logging from 'plylog'
+import pathIsAbsolute = require('path-is-absolute');
+
+//Trying to import this the TS leads to some really strange errors
 var colors = require('colors/safe');
-var cliArgs = require("command-line-args");
-var fs = require('fs');
-var pathIsAbsolute = require('path-is-absolute');
-var path = require('path');
-var logging = require('plylog');
+
 // jshint -W079
-var Promise = global.Promise || require('es6-promise').Promise;
+//var Promise = global.Promise || require('es6-promise').Promise;
 // jshint +W079
 
 var argumentDefinitions = require('./args').argumentDefinitions;
@@ -32,7 +36,7 @@ var usage = cli.getUsage({
   title: "polylint"
 });
 
-function run(env, args, stdout) {
+export function run(env, args, stdout) {
   return new Promise(function(resolve, reject) {
     var cliOptions;
     try {
@@ -66,19 +70,19 @@ function run(env, args, stdout) {
   });
 }
 
-function runWithOptions(options) {
+export function runWithOptions(options) {
   return new Promise(function(resolve, reject) {
     // Check options and dump usage if we find problems.
     var inputsOk = true;
-
     var inputs = options.input;
     var policyPath = options.policy;
 
     if (!inputs || !inputs.length) {
       if (options['config-file'] && options['config-field']) {
-        var field = options['config-field'];
+        const field = options['config-field'];
         try {
-          var contents = fs.readFileSync(options['config-file']);
+          //TODO: This any is bad, but no other types work. Defn for readFileSync on fs may need updating.
+          let contents:any = fs.readFileSync(options['config-file']);
           contents = JSON.parse(contents);
           if (contents[field] === undefined) {
             inputs = [];
@@ -148,12 +152,11 @@ function runWithOptions(options) {
      */
     var fatalFailureOccurred = false;
 
-
     function prettyPrintWarning(warning) {
       if (warning.fatal) {
         fatalFailureOccurred = true;
       }
-      var warningText = colors.red(warning.filename) + ":" +
+      const warningText = colors.red(warning.filename) + ":" +
                         warning.location.line + ":" + warning.location.column +
                         "\n    " + colors.gray(warning.message);
       logger.warn(warningText);
@@ -173,7 +176,7 @@ function runWithOptions(options) {
     var parentDirs = [];
     var foundBower = false;
     while (!foundBower) {
-      var candidatePath = path.resolve.apply(undefined, [options.root].concat(parentDirs).concat([options.bowerdir]));
+      const candidatePath = path.resolve.apply(undefined, [options.root].concat(parentDirs).concat([options.bowerdir]));
       if (candidatePath == path.join('/', options.bowerdir)) {
         break;
       }
@@ -181,9 +184,9 @@ function runWithOptions(options) {
         fs.statSync(candidatePath);
         foundBower = true;
       } catch (err) {
-        var currDir = path.resolve.apply(undefined, parentDirs);
+        const currDir = path.resolve.apply(undefined, parentDirs);
         parentDirs.push('..');
-        var parentDir = path.resolve.apply(undefined, parentDirs);
+        const parentDir = path.resolve.apply(undefined, parentDirs);
         if (currDir == parentDir) {
           // we've reach the root directory
           break;
@@ -197,7 +200,7 @@ function runWithOptions(options) {
     }
 
 
-    var lintPromise = Promise.resolve(true);
+    var lintPromise: Promise<boolean|void|{}> = Promise.resolve(true);
     var content;
 
     if (options.stdin) {
@@ -206,7 +209,7 @@ function runWithOptions(options) {
         return new Promise(function(resolve, reject) {
           process.stdin.setEncoding('utf8');
           process.stdin.on('readable', function() {
-            var chunk = process.stdin.read();
+            const chunk = process.stdin.read();
             if (chunk !== null) {
               content += chunk;
             }
@@ -261,9 +264,3 @@ function runWithOptions(options) {
     resolve(lintPromise.then(exit));
   });
 }
-
-module.exports = {
-  run: run,
-  runWithOptions: runWithOptions,
-  argumentDefinitions: argumentDefinitions,
-};

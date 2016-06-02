@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * @license
  * Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
@@ -9,9 +8,10 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 // jshint node:true
+// jshint esversion: 6
 'use strict';
 
-var cli = require('../lib/cli');
+import * as cli from './cli';
 
 process.title = 'polylint';
 

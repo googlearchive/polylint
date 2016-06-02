@@ -8,11 +8,23 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 // jshint node:true
-'use strict';
-var LintError = function LintError(filename, location, message, fatal) {
-  this.filename = filename;
-  this.location = location;
-  this.message = message;
-  this.fatal = fatal;
-};
-module.exports = LintError;
+// jshint esversion: 6
+
+interface JSLocation{
+  line?: number;
+  column?: number;
+}
+
+export class LintError {
+  filename: string;
+  location: JSLocation;
+  message: string;
+  fatal: boolean;
+
+  constructor(filename:string, location:JSLocation, message:string, fatal:boolean){
+    this.filename = filename;
+    this.location = location;
+    this.message = message;
+    this.fatal = fatal;
+  }
+}
