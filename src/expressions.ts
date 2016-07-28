@@ -19,10 +19,10 @@
  * @param {string} raw  The unparsed expression
  */
 class ParsedExpression{
-  public keys?:Array<string>;
-  public methods?:Array<string>;
-  public type?:string;
-  public raw?:string;
+  public keys:Array<string>;
+  public methods:Array<string>;
+  public type:string;
+  public raw:string;
 
   constructor(){}
 }

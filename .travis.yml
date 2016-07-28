@@ -1,11 +1,11 @@
 language: node_js
 node_js:
-  - "4"
-  - "5"
+- "4"
+- "5"
 sudo: false
 before_script:
-  - npm install -g bower
-  - npm install -g typescript
-  - bower install
-  - typings install
-  - tsc
+- npm install -g bower
+- npm install -g typescript
+- bower install
+- typings install
+- tsc
