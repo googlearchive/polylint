@@ -4,8 +4,4 @@ node_js:
 - "5"
 sudo: false
 before_script:
-- npm install -g bower
-- npm install -g typescript
-- bower install
-- typings install
-- tsc
+- npm run build

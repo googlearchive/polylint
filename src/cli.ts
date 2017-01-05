@@ -239,7 +239,7 @@ export function runWithOptions(options) {
         );
       })
       .then(function(lintWarnings){
-        lintWarnings.forEach(function(warning){
+        (lintWarnings as any[]).forEach(function(warning){
           // If specified, ignore errors from our transitive dependencies.
           if (options['no-recursion'] && input !== warning.filename) {
             return;

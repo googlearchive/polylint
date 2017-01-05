@@ -4,26 +4,11 @@
     "preserveConstEnums": true,
     "moduleResolution": "node",
     "outDir": "lib",
-    "module": "commonjs"
+    "module": "commonjs",
+    "lib": ["es2017"]
   },
-  "filesGlob": [
-    "./**/*.ts",
-    "!./node_modules/**/*.ts"
-  ],
-  "files": [
-    "./custom_typings/command-line-args.d.ts",
-    "./custom_typings/dom5.d.ts",
-    "./custom_typings/hydrolysis.d.ts",
-    "./custom_typings/plylog.d.ts",
-    "./src/cli.ts",
-    "./src/expressions.ts",
-    "./src/jsconf-policy.ts",
-    "./src/lint-error.ts",
-    "./src/linters.ts",
-    "./src/polylint-bin.ts",
-    "./src/polylint.ts",
-    "./typings/main.d.ts"
-  ],
-  "atom": {
-  }
+  "include": [
+    "./custom_typings/*.d.ts",
+    "./src/**.ts"
+  ]
 }
