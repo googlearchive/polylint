@@ -306,6 +306,10 @@ function lintBindingExpression(parsed,
                                implicitBindings,
                                name) {
   var undeclaredBindings = [];
+  properties = properties.concat([{
+    name: 'isAttached',
+    type: 'boolean'
+  }]);
   parsed.methods.forEach(function(method){
     // True if the method patches a property.
     var foundDefinition = false;
