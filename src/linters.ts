@@ -306,6 +306,10 @@ function lintBindingExpression(parsed,
                                implicitBindings,
                                name) {
   var undeclaredBindings = [];
+  /**
+   * Hardcode isAttached as a builtin Polymer method, to fix
+   * PolymerElements/iron-demo-helpers#47 until the new linter comes out.
+   */
   properties = properties.concat([{
     name: 'isAttached',
     type: 'boolean'
