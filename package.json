@@ -1,6 +1,6 @@
 {
   "name": "polylint",
-  "version": "2.10.2",
+  "version": "2.10.3",
   "description": "Keeps your Polymer Elements clean and functional!",
   "main": "lib/polylint.js",
   "bin": "lib/polylint-bin.js",
