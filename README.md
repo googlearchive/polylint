@@ -28,6 +28,27 @@ For complete usage instructions, run:
 polylint --help
 ```
 
+## Develop
+
+To start developing clone this repo:
+```
+git clone https://github.com/PolymerLabs/polylint.git
+```
+
+And then install dependencies:
+```
+cd polylint
+npm install
+bower install
+```
+
+### Tests
+
+To run the test simply run:
+```
+npm test
+```
+
 ## Contributing
 
 Polymer :heart: contributions! Please see the [Contributing Guide](https://github.com/Polymer/project/blob/master/Contributing.md) for general Polymer project contribution guidelines.
