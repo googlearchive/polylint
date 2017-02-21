@@ -6,7 +6,7 @@
   "bin": "lib/polylint-bin.js",
   "scripts": {
     "build": "tsc",
-    "test": "bower install && node_modules/.bin/jshint test && node_modules/.bin/mocha test/test.js"
+    "test": "bower install && npm run build && node_modules/.bin/jshint test && node_modules/.bin/mocha test/test.js"
   },
   "repository": {
     "type": "git",
