@@ -208,7 +208,6 @@ var nativeAttributes: Set<string> = new Set(['accesskey',
   'lang',
   'spellcheck',
   'style',
-  'style',
   'tabindex',
   'title']);
 
