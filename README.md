@@ -1,3 +1,6 @@
+# Deprecated
+*This project is deprecated.* Please see https://github.com/Polymer/polymer-linter for linting Polymer 1.0 and beyond.
+
 # Polylint
 Catch errors in your polymer project before even running your code.
 
